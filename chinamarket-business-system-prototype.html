@@ -1,0 +1,2214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中国大集商机中心 - 原型图</title>
+<script src="business-flow.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; background: #f5f6fa; color: #333; }
+.header { background: linear-gradient(135deg, #e60012, #c40010); color: #fff; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 56px; position: fixed; top: 0; left: 0; right: 0; z-index: 100; }
+.header h1 { font-size: 18px; font-weight: 600; letter-spacing: 1px; }
+.header .user-info { font-size: 14px; opacity: 0.9; }
+.sub-header { background: #fff; border-bottom: 1px solid #e8e8e8; padding: 0 24px; position: fixed; top: 56px; left: 0; right: 0; z-index: 99; display: flex; align-items: center; gap: 8px; height: 48px; }
+.sub-header .breadcrumb { font-size: 13px; color: #999; }
+.sub-header .breadcrumb span { color: #e60012; }
+.nav-tabs { display: flex; gap: 0; border-bottom: 2px solid #e8e8e8; position: fixed; top: 104px; left: 0; right: 0; z-index: 98; background: #fff; padding: 0 24px; }
+.nav-tab { padding: 12px 20px; font-size: 14px; cursor: pointer; color: #666; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; text-decoration: none; display: inline-block; }
+.nav-tab.active { color: #e60012; border-bottom-color: #e60012; font-weight: 600; }
+.nav-tab:hover { color: #e60012; }
+.page-content { margin-top: 152px; padding: 24px; min-height: calc(100vh - 152px); }
+.page { display: none; }
+.page.active { display: block; }
+
+/* Cards */
+.card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); margin-bottom: 16px; overflow: hidden; }
+.card-header { padding: 16px 20px; border-bottom: 1px solid #f0f0f0; font-size: 15px; font-weight: 600; display: flex; align-items: center; justify-content: space-between; }
+.card-body { padding: 20px; }
+
+/* Stats */
+.stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.stat-card { background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+.stat-card .stat-num { font-size: 28px; font-weight: 700; color: #e60012; }
+.stat-card .stat-label { font-size: 13px; color: #999; margin-top: 4px; }
+.stat-card .stat-sub { font-size: 12px; color: #52c41a; margin-top: 6px; }
+
+/* Buttons */
+.btn { display: inline-block; padding: 8px 20px; border-radius: 4px; font-size: 14px; cursor: pointer; border: none; transition: all 0.2s; }
+.btn-primary { background: #e60012; color: #fff; }
+.btn-primary:hover { background: #c40010; }
+.btn-outline { background: #fff; color: #e60012; border: 1px solid #e60012; }
+.btn-outline:hover { background: #fff5f5; }
+.btn-sm { padding: 4px 12px; font-size: 12px; }
+.btn-group { display: flex; gap: 8px; }
+
+/* Tables */
+.table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.table th { background: #fafafa; padding: 10px 12px; text-align: left; font-weight: 500; color: #666; border-bottom: 1px solid #e8e8e8; }
+.table td { padding: 12px; border-bottom: 1px solid #f0f0f0; }
+.table tr:hover td { background: #fafafa; }
+
+/* Tags */
+.tag { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 12px; }
+.tag-red { background: #fff1f0; color: #e60012; border: 1px solid #ffa39e; }
+.tag-green { background: #f6ffed; color: #52c41a; border: 1px solid #b7eb8f; }
+.tag-blue { background: #e6f7ff; color: #1890ff; border: 1px solid #91d5ff; }
+.tag-orange { background: #fff7e6; color: #fa8c16; border: 1px solid #ffd591; }
+
+/* Stars */
+.stars { color: #faad14; font-size: 13px; }
+
+/* Form */
+.form-group { margin-bottom: 16px; }
+.form-label { display: block; font-size: 13px; color: #666; margin-bottom: 6px; font-weight: 500; }
+.form-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.form-input, .form-select, .form-textarea { width: 100%; padding: 8px 12px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; outline: none; transition: border-color 0.2s; }
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: #e60012; }
+.form-textarea { min-height: 80px; resize: vertical; }
+.form-checkbox { margin-right: 16px; font-size: 13px; }
+.form-checkbox input { margin-right: 4px; }
+
+/* Progress */
+.progress-bar { display: flex; gap: 0; margin-bottom: 24px; }
+.progress-step { flex: 1; text-align: center; padding: 12px 8px; font-size: 12px; color: #ccc; border-bottom: 3px solid #e8e8e8; position: relative; }
+.progress-step.done { color: #52c41a; border-color: #52c41a; }
+.progress-step.current { color: #e60012; border-color: #e60012; font-weight: 600; }
+
+/* Match card */
+.match-card { display: flex; align-items: center; gap: 16px; padding: 16px; border: 1px solid #e8e8e8; border-radius: 6px; margin-bottom: 12px; transition: all 0.2s; }
+.match-card:hover { border-color: #e60012; box-shadow: 0 2px 8px rgba(230,0,18,0.08); }
+.match-rank { width: 40px; height: 40px; background: #e60012; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; flex-shrink: 0; }
+.match-info { flex: 1; }
+.match-name { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.match-meta { font-size: 12px; color: #999; line-height: 1.8; }
+.match-score { text-align: right; }
+.match-score .percent { font-size: 24px; font-weight: 700; color: #e60012; }
+.match-score .label { font-size: 12px; color: #999; }
+
+/* Comparison */
+.compare-table { border: 1px solid #e8e8e8; border-radius: 6px; overflow: hidden; }
+.compare-table table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.compare-table th { background: #fafafa; font-weight: 600; padding: 12px; border-bottom: 1px solid #e8e8e8; text-align: center; }
+.compare-table th:first-child { text-align: left; width: 120px; }
+.compare-table td { padding: 12px; border-bottom: 1px solid #f0f0f0; text-align: center; }
+.compare-table td:first-child { text-align: left; font-weight: 500; color: #666; }
+.compare-table .best { background: #f6ffed; font-weight: 600; color: #52c41a; }
+.compare-table tr:last-child td { border-bottom: none; }
+
+/* Filter bar */
+.filter-bar { display: flex; gap: 12px; padding: 16px 0; flex-wrap: wrap; align-items: center; }
+.filter-bar label { font-size: 13px; color: #666; margin-right: 4px; }
+.filter-bar input[type="text"] { width: 200px; }
+.filter-bar .filter-group { display: flex; align-items: center; gap: 8px; }
+
+/* Timeline */
+.timeline { position: relative; padding-left: 24px; }
+.timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: #e8e8e8; }
+.timeline-item { position: relative; padding-bottom: 20px; }
+.timeline-item::before { content: ''; position: absolute; left: -20px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: #e60012; border: 2px solid #fff; box-shadow: 0 0 0 2px #e60012; }
+.timeline-item.done::before { background: #52c41a; box-shadow: 0 0 0 2px #52c41a; }
+.timeline-time { font-size: 12px; color: #999; }
+.timeline-content { font-size: 14px; margin-top: 4px; }
+
+/* Notification */
+.notif-dot { width: 8px; height: 8px; background: #e60012; border-radius: 50%; display: inline-block; margin-right: 4px; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .form-row { grid-template-columns: 1fr; }
+  .nav-tab { padding: 12px 12px; font-size: 13px; }
+}
+
+/* Flow diagram */
+.flow-diagram { display: flex; align-items: center; gap: 8px; padding: 20px; overflow-x: auto; }
+.flow-node { padding: 12px 20px; background: #e60012; color: #fff; border-radius: 6px; font-size: 13px; font-weight: 500; white-space: nowrap; text-align: center; min-width: 100px; }
+.flow-node.gray { background: #999; }
+.flow-arrow { font-size: 18px; color: #ccc; flex-shrink: 0; }
+
+/* Category pills */
+.cat-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+
+/* Page header */
+.page-header { margin-bottom: 24px; }
+.page-header h2 { font-size: 24px; margin-bottom: 8px; }
+
+/* Stat card large */
+.stat-card-large { min-height: 100px; }
+.stat-card-large .stat-num { font-size: 32px; }
+
+/* Category tree */
+.category-tree { display: flex; flex-direction: column; gap: 16px; }
+.category-item { border: 1px solid #e8e8e8; border-radius: 8px; padding: 16px; }
+.category-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.category-icon { font-size: 20px; }
+.category-stats { margin-left: auto; font-size: 13px; color: #666; }
+.category-children { display: flex; gap: 12px; flex-wrap: wrap; }
+.category-child { padding: 6px 12px; background: #f5f5f5; border-radius: 4px; font-size: 13px; }
+
+/* Role selector */
+.role-selector { margin-left: auto; }
+.role-select { padding: 6px 12px; border: 1px solid #d9d9d9; border-radius: 4px; background: #fff; font-size: 13px; color: #333; }
+.role-select:focus { outline: none; border-color: #e60012; }
+.sub-header { display: flex; align-items: center; }
+
+/* Button states */
+.btn-success { background: #52c41a !important; color: #fff !important; border-color: #52c41a !important; }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.loading { display: inline-block; animation: pulse 1.5s infinite; }
+
+/* Toast notification */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-size: 14px;
+  z-index: 1000;
+  transition: transform 0.3s ease;
+  max-width: 80%;
+  text-align: center;
+}
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+}
+.toast-success {
+  background: rgba(82, 196, 26, 0.9);
+}
+.toast-warning {
+  background: rgba(250, 173, 20, 0.9);
+}
+.toast-info {
+  background: rgba(24, 144, 255, 0.9);
+}
+
+/* Progress indicator */
+.progress-bar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 16px 0;
+  padding: 12px;
+  background: #fafafa;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+.progress-step {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #999;
+  white-space: nowrap;
+}
+.progress-step.active {
+  color: #e60012;
+  font-weight: 600;
+}
+.progress-step.completed {
+  color: #52c41a;
+}
+.progress-step .step-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #d9d9d9;
+}
+.progress-step.active .step-dot {
+  background: #e60012;
+}
+.progress-step.completed .step-dot {
+  background: #52c41a;
+}
+.progress-arrow {
+  color: #d9d9d9;
+  font-size: 10px;
+  margin: 0 2px;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+.cat-pill { padding: 6px 14px; border: 1px solid #d9d9d9; border-radius: 20px; font-size: 13px; cursor: pointer; transition: all 0.2s; }
+.cat-pill:hover, .cat-pill.selected { border-color: #e60012; color: #e60012; background: #fff5f5; }
+
+/* Alert */
+.alert { padding: 10px 16px; border-radius: 4px; font-size: 13px; margin-bottom: 12px; }
+.alert-info { background: #e6f7ff; border: 1px solid #91d5ff; color: #1890ff; }
+.alert-warning { background: #fff7e6; border: 1px solid #ffd591; color: #fa8c16; }
+
+/* Chart placeholder */
+.chart-placeholder { background: #fafafa; border: 1px dashed #d9d9d9; border-radius: 6px; padding: 40px; text-align: center; color: #999; font-size: 13px; }
+.chart-placeholder .title { font-size: 15px; color: #666; margin-bottom: 8px; }
+
+/* Hot list */
+.hot-list { list-style: none; }
+.hot-list li { padding: 8px 0; border-bottom: 1px solid #f0f0f0; font-size: 13px; display: flex; align-items: center; gap: 8px; }
+.hot-list li:last-child { border-bottom: none; }
+.hot-rank { width: 20px; height: 20px; background: #e60012; color: #fff; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+.hot-rank.silver { background: #999; }
+.hot-rank.bronze { background: #cd7f32; }
+
+/* Modal */
+.modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.45); z-index: 1000; display: flex; align-items: center; justify-content: center; animation: fadeIn 0.2s ease; }
+.modal-content { background: #fff; border-radius: 8px; width: 560px; max-height: 85vh; overflow-y: auto; box-shadow: 0 8px 24px rgba(0,0,0,0.15); animation: slideUp 0.25s ease; }
+.modal-header { padding: 16px 24px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; justify-content: space-between; }
+.modal-header h3 { font-size: 16px; font-weight: 600; color: #333; }
+.modal-close { background: none; border: none; font-size: 20px; color: #999; cursor: pointer; padding: 0; line-height: 1; }
+.modal-close:hover { color: #e60012; }
+.modal-body { padding: 24px; }
+.modal-footer { padding: 12px 24px; border-top: 1px solid #f0f0f0; display: flex; justify-content: flex-end; gap: 12px; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Form elements in modal */
+.form-group { margin-bottom: 16px; }
+.form-label { display: block; font-size: 13px; color: #666; margin-bottom: 6px; font-weight: 500; }
+.form-input, .form-select, .form-textarea { width: 100%; padding: 8px 12px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 13px; color: #333; outline: none; transition: border-color 0.2s; }
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: #e60012; box-shadow: 0 0 0 2px rgba(230,0,18,0.1); }
+.form-textarea { min-height: 80px; resize: vertical; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+/* Info rows for detail modal */
+.info-row { display: flex; padding: 10px 0; border-bottom: 1px solid #f5f5f5; align-items: flex-start; }
+.info-row:last-child { border-bottom: none; }
+.info-label { flex: 0 0 100px; font-size: 13px; color: #999; }
+.info-value { flex: 1; font-size: 13px; color: #333; word-break: break-all; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>中国大集商机中心</h1>
+  <div class="user-info">欢迎回来，张采购 | 采购商 ID: 198****5993</div>
+</div>
+
+<div class="sub-header">
+  <span class="breadcrumb">首页 / <span>商机中心</span></span>
+  <div class="role-selector">
+    <select id="roleSelect" class="role-select">
+      <option value="buyer">采购商</option>
+      <option value="supplier">供应商</option>
+      <option value="operator">平台运营</option>
+    </select>
+  </div>
+</div>
+
+<div class="nav-tabs" id="navTabs">
+  <a class="nav-tab active" data-page="dashboard">工作台</a>
+  <a class="nav-tab" data-page="publish">发布需求</a>
+  <a class="nav-tab" data-page="match">智能匹配</a>
+  <a class="nav-tab" data-page="compare">比价看板</a>
+  <a class="nav-tab" data-page="sample">样品管理</a>
+  <a class="nav-tab" data-page="market">市场情报</a>
+</div>
+
+<div class="page-content">
+
+  <!-- ==================== 工作台 ==================== -->
+  <div class="page active" id="page-dashboard">
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-num">3</div>
+        <div class="stat-label">进行中的商机</div>
+        <div class="stat-sub">↑ 较上月 +1</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">15</div>
+        <div class="stat-label">匹配供应商</div>
+        <div class="stat-sub">平均匹配度 87%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">2</div>
+        <div class="stat-label">待处理样品</div>
+        <div class="stat-sub"><span class="notif-dot"></span>1 个待评价</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">¥24,680</div>
+        <div class="stat-label">预计采购金额</div>
+        <div class="stat-sub">2 笔试单待确认</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        我的商机概览
+        <a class="btn btn-primary btn-sm" onclick="switchTab('publish')">+ 发布新需求</a>
+      </div>
+      <div class="card-body">
+        <table class="table">
+          <thead>
+            <tr><th>需求名称</th><th>品类</th><th>状态</th><th>匹配供应商</th><th>更新时间</th><th>操作</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>不锈钢餐具采购</strong> (1000件)</td>
+              <td>日用百货 / 餐具</td>
+              <td><span class="tag tag-blue">报价中</span></td>
+              <td>15家</td>
+              <td>今天 14:30</td>
+              <td><a class="btn btn-outline btn-sm" onclick="switchTab('compare')">查看比价</a></td>
+            </tr>
+            <tr>
+              <td><strong>食品包装袋定制</strong> (5000个)</td>
+              <td>辅料包装 / 包装袋</td>
+              <td><span class="tag tag-orange">样品中</span></td>
+              <td>8家</td>
+              <td>昨天 09:15</td>
+              <td><a class="btn btn-outline btn-sm" onclick="switchTab('sample')">追踪样品</a></td>
+            </tr>
+            <tr>
+              <td><strong>日用塑料收纳盒</strong> (2000个)</td>
+              <td>日用百货 / 收纳盒</td>
+              <td><span class="tag tag-green">匹配完成</span></td>
+              <td>22家</td>
+              <td>3天前</td>
+              <td><a class="btn btn-outline btn-sm" onclick="switchTab('match')">查看匹配</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+      <div class="card">
+        <div class="card-header">市场动态</div>
+        <div class="card-body">
+          <ul class="hot-list">
+            <li><span class="hot-rank">1</span> 五金工具类目热度上升 32%</li>
+            <li><span class="hot-rank silver">2</span> 不锈钢原料价格上涨 5.2%</li>
+            <li><span class="hot-rank bronze">3</span> 临沂新增 12 家食品包装供应商</li>
+            <li><span>4</span> 塑料制品类目需求环比增长 18%</li>
+            <li><span>5</span> 义乌小商品批发指数上升</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">推荐供应商（基于您的采购偏好）</div>
+        <div class="card-body">
+          <div class="match-card" style="padding:12px; margin-bottom:8px;">
+            <div class="match-rank" style="width:32px;height:32px;font-size:13px;">1</div>
+            <div class="match-info">
+              <div class="match-name" style="font-size:14px;">临沂不锈钢制品厂</div>
+              <div class="match-meta">日用百货/餐具 · ★★★★☆ 4.8 · 256笔交易</div>
+            </div>
+          </div>
+          <div class="match-card" style="padding:12px; margin-bottom:8px;">
+            <div class="match-rank" style="width:32px;height:32px;font-size:13px;">2</div>
+            <div class="match-info">
+              <div class="match-name" style="font-size:14px;">义乌五金餐具厂</div>
+              <div class="match-meta">日用百货/餐具 · ★★★★☆ 4.6 · 189笔交易</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 发布需求 ==================== -->
+  <div class="page" id="page-publish">
+    <div class="card">
+      <div class="card-header">发布采购需求</div>
+      <div class="card-body">
+        <div class="progress-bar">
+          <div class="progress-step done">选择品类</div>
+          <div class="progress-step current">填写规格</div>
+          <div class="progress-step">设置条件</div>
+          <div class="progress-step">确认发布</div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">品类选择</label>
+            <select class="form-select">
+              <option>日用百货</option>
+              <option>食品生鲜</option>
+              <option>辅料包装</option>
+              <option>五金机电</option>
+              <option>玩具童车</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">二级类目</label>
+            <select class="form-select">
+              <option>餐具</option>
+              <option>收纳盒袋</option>
+              <option>清洁工具</option>
+              <option>雨伞雨衣</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">规格要求</label>
+          <textarea class="form-textarea" placeholder="例如：材质304不锈钢、尺寸20cm、重量200g±10g、表面镜面抛光处理"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">采购数量</label>
+            <input class="form-input" type="number" placeholder="例如：1000" value="1000">
+          </div>
+          <div class="form-group">
+            <label class="form-label">单位</label>
+            <select class="form-select"><option>件</option><option>个</option><option>套</option><option>吨</option><option>箱</option></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">预算区间（元/件）</label>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <input class="form-input" type="number" placeholder="最低" value="8" style="width:100px;">
+              <span>-</span>
+              <input class="form-input" type="number" placeholder="最高" value="12" style="width:100px;">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">期望交期</label>
+            <select class="form-select"><option>30天内</option><option>15天内</option><option>45天内</option><option>60天内</option></select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">起批量要求</label>
+            <input class="form-input" type="number" placeholder="最小起订量" value="100">
+          </div>
+          <div class="form-group">
+            <label class="form-label">收货地区</label>
+            <input class="form-input" type="text" placeholder="省/市/区" value="浙江省杭州市">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">匹配条件设置</label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <label class="form-checkbox"><input type="checkbox" checked> 仅匹配认证供应商</label>
+            <label class="form-checkbox"><input type="checkbox" checked> 历史交易 ≥ 10笔</label>
+            <label class="form-checkbox"><input type="checkbox" checked> 评分 ≥ 4.0</label>
+            <label class="form-checkbox"><input type="checkbox"> 支持免费样品</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">附件上传</label>
+          <div style="border:1px dashed #d9d9d9; border-radius:4px; padding:24px; text-align:center; cursor:pointer; color:#999;">
+            + 上传产品图片/规格书（支持 JPG/PNG/PDF，最多5个文件）
+          </div>
+        </div>
+
+        <div class="btn-group" style="margin-top:20px;">
+          <button class="btn btn-primary btn-publish">立即发布</button>
+          <button class="btn btn-outline">保存草稿</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 智能匹配 ==================== -->
+  <div class="page" id="page-match">
+    <div class="card">
+      <div class="card-header">
+        「不锈钢餐具」匹配结果 · 共匹配 15 家供应商
+        <span class="tag tag-green" style="margin-left:8px;">实时更新</span>
+      </div>
+      <div class="card-body">
+        <div class="filter-bar">
+          <label>认证等级：</label>
+          <label class="form-checkbox"><input type="checkbox" checked> 金牌</label>
+          <label class="form-checkbox"><input type="checkbox" checked> 银牌</label>
+          <label class="form-checkbox"><input type="checkbox"> 铜牌</label>
+          <span style="color:#ccc;">|</span>
+          <label>起批量：</label>
+          <select class="form-select" style="width:auto;">
+            <option>全部</option><option>&lt;100件</option><option>100-500件</option><option>&gt;500件</option>
+          </select>
+          <span style="color:#ccc;">|</span>
+          <label>价格区间：</label>
+          <select class="form-select" style="width:auto;">
+            <option>全部</option><option>8-10元</option><option>10-12元</option><option>&gt;12元</option>
+          </select>
+          <span style="color:#ccc;">|</span>
+          <label>排序：</label>
+          <select class="form-select" style="width:auto;">
+            <option>匹配度 ↓</option><option>价格 ↑</option><option>评级 ↓</option><option>交易量 ↓</option>
+          </select>
+        </div>
+
+        <div class="match-card" style="border-color:#e60012; background:#fff5f5;">
+          <div class="match-rank">1</div>
+          <div class="match-info">
+            <div class="match-name">临沂不锈钢制品厂 <span class="tag tag-red">金牌认证</span></div>
+            <div class="match-meta">
+              日用百货 / 餐具 · 起批量 100件 · 8.5元/件 · 交期25天
+              · 历史交易 256笔 · <span class="stars">★★★★☆</span> 4.8 · 支持免费样品
+            </div>
+          </div>
+          <div class="match-score">
+            <div class="percent">95%</div>
+            <div class="label">匹配度</div>
+          </div>
+          <div class="btn-group" style="flex-direction:column;gap:6px;">
+            <button class="btn btn-outline btn-sm">查看详情</button>
+            <button class="btn btn-primary btn-sm">申请样品</button>
+            <button class="btn btn-outline btn-sm btn-compare">加入比价</button>
+          </div>
+        </div>
+
+        <div class="match-card">
+          <div class="match-rank" style="background:#e67e22;">2</div>
+          <div class="match-info">
+            <div class="match-name">义乌五金餐具厂 <span class="tag tag-red">金牌认证</span></div>
+            <div class="match-meta">
+              日用百货 / 餐具 · 起批量 200件 · 9.2元/件 · 交期30天
+              · 历史交易 189笔 · <span class="stars">★★★★☆</span> 4.6 · 样品费 ¥20
+            </div>
+          </div>
+          <div class="match-score">
+            <div class="percent">88%</div>
+            <div class="label">匹配度</div>
+          </div>
+          <div class="btn-group" style="flex-direction:column;gap:6px;">
+            <button class="btn btn-outline btn-sm">查看详情</button>
+            <button class="btn btn-primary btn-sm">申请样品</button>
+            <button class="btn btn-outline btn-sm btn-compare">加入比价</button>
+          </div>
+        </div>
+
+        <div class="match-card">
+          <div class="match-rank" style="background:#2ecc71;">3</div>
+          <div class="match-info">
+            <div class="match-name">山东临沂五金厂 <span class="tag tag-orange">银牌认证</span></div>
+            <div class="match-meta">
+              日用百货 / 餐具 · 起批量 50件 · 10.5元/件 · 交期20天
+              · 历史交易 45笔 · <span class="stars">★★★☆☆</span> 3.9 · 不支持样品
+            </div>
+          </div>
+          <div class="match-score">
+            <div class="percent">74%</div>
+            <div class="label">匹配度</div>
+          </div>
+          <div class="btn-group" style="flex-direction:column;gap:6px;">
+            <button class="btn btn-outline btn-sm">查看详情</button>
+            <button class="btn btn-outline btn-sm btn-compare">加入比价</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 比价看板 ==================== -->
+  <div class="page" id="page-compare">
+    <div class="card">
+      <div class="card-header">
+        比价看板 · 不锈钢餐具
+        <span class="tag tag-blue">3家供应商对比</span>
+      </div>
+      <div class="card-body">
+        <div class="compare-table">
+          <table>
+            <thead>
+              <tr>
+                <th>对比项</th>
+                <th>临沂不锈钢制品厂<br><small style="color:#999;">金牌认证</small></th>
+                <th>义乌五金餐具厂<br><small style="color:#999;">金牌认证</small></th>
+                <th>山东临沂五金厂<br><small style="color:#999;">银牌认证</small></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>单价</td>
+                <td class="best">8.5元/件</td>
+                <td>9.2元/件</td>
+                <td>10.5元/件</td>
+              </tr>
+              <tr>
+                <td>起批量</td>
+                <td>100件</td>
+                <td>200件</td>
+                <td class="best">50件</td>
+              </tr>
+              <tr>
+                <td>交期</td>
+                <td>25天</td>
+                <td>30天</td>
+                <td class="best">20天</td>
+              </tr>
+              <tr>
+                <td>样品费</td>
+                <td class="best">免费</td>
+                <td>¥20</td>
+                <td>不支持</td>
+              </tr>
+              <tr>
+                <td>供应商评级</td>
+                <td class="best"><span class="stars">★★★★☆</span> 4.8</td>
+                <td><span class="stars">★★★★☆</span> 4.6</td>
+                <td><span class="stars">★★★☆☆</span> 3.9</td>
+              </tr>
+              <tr>
+                <td>历史交易</td>
+                <td class="best">256笔</td>
+                <td>189笔</td>
+                <td>45笔</td>
+              </tr>
+              <tr>
+                <td>样品支持</td>
+                <td style="color:#52c41a;">✓</td>
+                <td style="color:#52c41a;">✓</td>
+                <td style="color:#ccc;">✗</td>
+              </tr>
+              <tr>
+                <td>操作</td>
+                <td>
+                  <button class="btn btn-primary btn-sm">发送询价</button>
+                  <button class="btn btn-outline btn-sm" style="margin-top:4px;">申请样品</button>
+                </td>
+                <td>
+                  <button class="btn btn-primary btn-sm">发送询价</button>
+                  <button class="btn btn-outline btn-sm" style="margin-top:4px;">申请样品</button>
+                </td>
+                <td>
+                  <button class="btn btn-outline btn-sm">发送询价</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="alert alert-info" style="margin-top:16px;">
+          <strong>系统推荐：</strong>临沂不锈钢制品厂综合性价比最高——价格最低、评级最高、样品免费、交易量大。建议优先发送询价。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 样品管理 ==================== -->
+  <div class="page" id="page-sample">
+    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 16px;">
+      <div class="stat-card">
+        <div class="stat-num" style="font-size:22px;">1</div>
+        <div class="stat-label">申请中</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="font-size:22px;color:#fa8c16;">1</div>
+        <div class="stat-label">已发货</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" style="font-size:22px;color:#52c41a;">1</div>
+        <div class="stat-label">已收货</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">🔴 样品申请中</div>
+      <div class="card-body">
+        <div class="match-card" style="border-left:3px solid #e60012;">
+          <div class="match-info">
+            <div class="match-name">临沂不锈钢制品厂 · 304不锈钢餐具20cm</div>
+            <div class="match-meta">
+              申请时间：今天 14:30 · 样品费：免费 · 预计1-3天内审核
+            </div>
+          </div>
+          <span class="tag tag-red">审核中</span>
+          <button class="btn btn-outline btn-sm">取消申请</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">🟡 样品已发货</div>
+      <div class="card-body">
+        <div class="match-card" style="border-left:3px solid #fa8c16;">
+          <div class="match-info">
+            <div class="match-name">义乌五金餐具厂 · 不锈钢餐具套装</div>
+            <div class="match-meta">
+              发货时间：今天 14:30 · 物流：顺丰速运 SF1234567890 · 预计2天到达
+            </div>
+          </div>
+          <span class="tag tag-orange">运输中</span>
+          <button class="btn btn-outline btn-sm">查看物流</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">🟢 样品已收货</div>
+      <div class="card-body">
+        <div class="match-card" style="border-left:3px solid #52c41a;">
+          <div class="match-info">
+            <div class="match-name">山东临沂五金厂 · 不锈钢餐具</div>
+            <div class="match-meta">
+              收货时间：昨天 · 样品状态：完好 · 待评价
+            </div>
+          </div>
+          <button class="btn btn-primary btn-sm">填写评价</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <div class="card-header">样品评价记录</div>
+      <div class="card-body">
+        <table class="table">
+          <thead>
+            <tr><th>供应商</th><th>样品名称</th><th>评价时间</th><th>评分</th><th>评价内容</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>浙江义乌小商品</td>
+              <td>塑料收纳盒样品</td>
+              <td>5天前</td>
+              <td><span class="stars">★★★★☆</span></td>
+              <td>质量不错，符合预期，包装完好</td>
+            </tr>
+            <tr>
+              <td>广东日用品厂</td>
+              <td>清洁工具套装</td>
+              <td>12天前</td>
+              <td><span class="stars">★★★☆☆</span></td>
+              <td>一般，材质偏薄</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 市场情报 ==================== -->
+  <div class="page" id="page-market">
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+      <div class="card">
+        <div class="card-header">品类热度排行</div>
+        <div class="card-body">
+          <div class="chart-placeholder">
+            <div class="title">品类搜索热度趋势（近30天）</div>
+            <div style="display:flex; justify-content:space-around; align-items:flex-end; height:150px; padding:0 20px; margin-top:16px;">
+              <div style="text-align:center;">
+                <div style="width:40px; background:linear-gradient(180deg,#e60012,#ff6b6b); height:120px; border-radius:4px 4px 0 0;"></div>
+                <div style="font-size:11px; margin-top:4px;">五金</div>
+              </div>
+              <div style="text-align:center;">
+                <div style="width:40px; background:linear-gradient(180deg,#e60012,#ff6b6b); height:100px; border-radius:4px 4px 0 0;"></div>
+                <div style="font-size:11px; margin-top:4px;">食品</div>
+              </div>
+              <div style="text-align:center;">
+                <div style="width:40px; background:linear-gradient(180deg,#e60012,#ff6b6b); height:85px; border-radius:4px 4px 0 0;"></div>
+                <div style="font-size:11px; margin-top:4px;">日用</div>
+              </div>
+              <div style="text-align:center;">
+                <div style="width:40px; background:linear-gradient(180deg,#e60012,#ff6b6b); height:65px; border-radius:4px 4px 0 0;"></div>
+                <div style="font-size:11px; margin-top:4px;">包装</div>
+              </div>
+              <div style="text-align:center;">
+                <div style="width:40px; background:linear-gradient(180deg,#e60012,#ff6b6b); height:50px; border-radius:4px 4px 0 0;"></div>
+                <div style="font-size:11px; margin-top:4px;">玩具</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">价格走势</div>
+        <div class="card-body">
+          <div class="chart-placeholder">
+            <div class="title">不锈钢原料价格走势（近6个月）</div>
+            <svg width="100%" height="140" style="margin-top:8px;">
+              <polyline points="20,100 80,95 140,85 200,70 260,60 320,55" fill="none" stroke="#e60012" stroke-width="2.5"/>
+              <circle cx="20" cy="100" r="3" fill="#e60012"/>
+              <circle cx="80" cy="95" r="3" fill="#e60012"/>
+              <circle cx="140" cy="85" r="3" fill="#e60012"/>
+              <circle cx="200" cy="70" r="3" fill="#e60012"/>
+              <circle cx="260" cy="60" r="3" fill="#e60012"/>
+              <circle cx="320" cy="55" r="3" fill="#e60012"/>
+              <line x1="20" y1="110" x2="320" y2="110" stroke="#e8e8e8"/>
+              <text x="20" y="125" font-size="10" fill="#999">1月</text>
+              <text x="80" y="125" font-size="10" fill="#999">2月</text>
+              <text x="140" y="125" font-size="10" fill="#999">3月</text>
+              <text x="200" y="125" font-size="10" fill="#999">4月</text>
+              <text x="260" y="125" font-size="10" fill="#999">5月</text>
+              <text x="320" y="125" font-size="10" fill="#999">6月</text>
+            </svg>
+            <div style="color:#e60012; font-size:13px; margin-top:4px;">↑ 累计上涨 5.2%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">新入驻供应商动态</div>
+      <div class="card-body">
+        <table class="table">
+          <thead>
+            <tr><th>供应商</th><th>主营类目</th><th>所在地区</th><th>入驻时间</th><th>初始评级</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>山东临沂五金厂</strong></td>
+              <td>五金工具、机械配件</td>
+              <td>山东临沂</td>
+              <td>今天</td>
+              <td><span class="tag tag-green">新入驻</span></td>
+            </tr>
+            <tr>
+              <td>浙江义乌小商品</td>
+              <td>日用百货、塑料制品</td>
+              <td>浙江义乌</td>
+              <td>昨天</td>
+              <td><span class="tag tag-green">新入驻</span></td>
+            </tr>
+            <tr>
+              <td>河北白沟箱包厂</td>
+              <td>皮革箱包、手袋</td>
+              <td>河北保定</td>
+              <td>2天前</td>
+              <td><span class="tag tag-green">新入驻</span></td>
+            </tr>
+            <tr>
+              <td>广东汕头玩具厂</td>
+              <td>玩具童车、益智玩具</td>
+              <td>广东汕头</td>
+              <td>3天前</td>
+              <td><span class="tag tag-blue">认证中</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 供应商端 ==================== -->
+  <div class="page" id="page-supplier">
+    <div class="page-header">
+      <h2>供应商工作台</h2>
+      <div class="user-info">供应商：临沂五金制品厂 | ID: SUP-20240609</div>
+    </div>
+    
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-num">8</div>
+        <div class="stat-label">待报价需求</div>
+        <div class="stat-sub"><span class="notif-dot"></span>2 个高匹配</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">3</div>
+        <div class="stat-label">进行中报价</div>
+        <div class="stat-sub">1 个待确认样品</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">¥56,200</div>
+        <div class="stat-label">本月成交额</div>
+        <div class="stat-sub">↑ 较上月 +12%</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">4.8</div>
+        <div class="stat-label">服务评分</div>
+        <div class="stat-sub">行业排名 Top 15%</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        商机大厅
+        <div class="filter-group">
+          <select class="form-select-sm">
+            <option>全部品类</option>
+            <option>五金机电</option>
+            <option>日用百货</option>
+            <option>食品生鲜</option>
+          </select>
+          <select class="form-select-sm">
+            <option>全部地区</option>
+            <option>华东</option>
+            <option>华北</option>
+            <option>华南</option>
+          </select>
+          <button class="btn btn-primary btn-sm">智能推荐</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <table class="table">
+          <thead>
+            <tr><th>需求名称</th><th>采购商</th><th>品类</th><th>匹配度</th><th>预算</th><th>截止时间</th><th>操作</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>不锈钢餐具采购</strong> (1000件)</td>
+              <td>上海餐饮集团</td>
+              <td>日用百货 / 餐具</td>
+              <td><span class="tag tag-green">92%</span></td>
+              <td>¥15,000-20,000</td>
+              <td>06-15 18:00</td>
+              <td><button class="btn btn-primary btn-sm btn-quote">立即报价</button></td>
+            </tr>
+            <tr>
+              <td><strong>电动工具配件</strong> (500套)</td>
+              <td>广东机械厂</td>
+              <td>五金机电 / 工具</td>
+              <td><span class="tag tag-green">88%</span></td>
+              <td>¥8,000-12,000</td>
+              <td>06-12 12:00</td>
+              <td><button class="btn btn-primary btn-sm btn-quote">立即报价</button></td>
+            </tr>
+            <tr>
+              <td><strong>食品包装袋定制</strong> (5000个)</td>
+              <td>北京食品公司</td>
+              <td>辅料包装 / 包装袋</td>
+              <td><span class="tag tag-blue">76%</span></td>
+              <td>¥3,000-5,000</td>
+              <td>06-10 23:59</td>
+              <td><button class="btn btn-outline btn-sm">查看详情</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        我的报价管理
+        <a class="btn btn-outline btn-sm" onclick="showTemplateModal()">+ 新建报价模板</a>
+      </div>
+      <div class="card-body">
+        <table class="table">
+          <thead>
+            <tr><th>报价单号</th><th>需求名称</th><th>报价状态</th><th>报价金额</th><th>提交时间</th><th>操作</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>QUO-20240609001</code></td>
+              <td>不锈钢餐具采购</td>
+              <td><span class="tag tag-blue">采购商比价中</span></td>
+              <td>¥18,500</td>
+              <td>今天 10:30</td>
+              <td><button class="btn btn-outline btn-sm">修改</button></td>
+            </tr>
+            <tr>
+              <td><code>QUO-20240608002</code></td>
+              <td>电动工具配件</td>
+              <td><span class="tag tag-green">样品待寄送</span></td>
+              <td>¥10,200</td>
+              <td>昨天 14:20</td>
+              <td><button class="btn btn-primary btn-sm btn-sample">立即寄样</button></td>
+            </tr>
+            <tr>
+              <td><code>QUO-20240607003</code></td>
+              <td>食品包装袋定制</td>
+              <td><span class="tag tag-orange">等待采购商确认</span></td>
+              <td>¥4,500</td>
+              <td>前天 09:15</td>
+              <td><button class="btn btn-outline btn-sm">催单</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 运营端 ==================== -->
+  <div class="page" id="page-operation">
+    <div class="page-header">
+      <h2>平台运营中心</h2>
+      <div class="user-info">运营管理员：平台运营部 | 权限：超级管理员</div>
+    </div>
+    
+    <div class="stat-grid">
+      <div class="stat-card stat-card-large">
+        <div class="stat-num">1,248</div>
+        <div class="stat-label">今日商机发布量</div>
+        <div class="stat-sub">↑ 较昨日 +8%</div>
+      </div>
+      <div class="stat-card stat-card-large">
+        <div class="stat-num">3,567</div>
+        <div class="stat-label">活跃供应商数</div>
+        <div class="stat-sub">在线率 78%</div>
+      </div>
+      <div class="stat-card stat-card-large">
+        <div class="stat-num">¥2.4M</div>
+        <div class="stat-label">今日撮合成交额</div>
+        <div class="stat-sub">转化率 12.5%</div>
+      </div>
+      <div class="stat-card stat-card-large">
+        <div class="stat-num">94.2%</div>
+        <div class="stat-label">供需匹配成功率</div>
+        <div class="stat-sub">行业均值 86%</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        供需撮合干预
+        <div class="filter-group">
+          <input type="text" class="form-input-sm" placeholder="搜索商机或供应商">
+          <select class="form-select-sm">
+            <option>全部状态</option>
+            <option>匹配失败</option>
+            <option>报价停滞</option>
+            <option>样品问题</option>
+          </select>
+          <button class="btn btn-primary btn-sm">人工撮合</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <table class="table">
+          <thead>
+            <tr><th>商机ID</th><th>采购商</th><th>品类</th><th>问题类型</th><th>停滞时长</th><th>推荐供应商</th><th>操作</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>OPP-20240609001</code></td>
+              <td>上海餐饮集团</td>
+              <td>日用百货 / 餐具</td>
+              <td><span class="tag tag-red">匹配失败</span></td>
+              <td>48小时</td>
+              <td>临沂不锈钢厂 (匹配度91%)</td>
+              <td><button class="btn btn-primary btn-sm btn-intervene">人工推荐</button></td>
+            </tr>
+            <tr>
+              <td><code>OPP-20240608002</code></td>
+              <td>广东机械厂</td>
+              <td>五金机电 / 工具</td>
+              <td><span class="tag tag-orange">报价停滞</span></td>
+              <td>36小时</td>
+              <td>浙江工具厂 (匹配度89%)</td>
+              <td><button class="btn btn-primary btn-sm">推送提醒</button></td>
+            </tr>
+            <tr>
+              <td><code>OPP-20240607003</code></td>
+              <td>北京食品公司</td>
+              <td>辅料包装 / 包装袋</td>
+              <td><span class="tag tag-blue">样品问题</span></td>
+              <td>24小时</td>
+              <td>山东包装厂 (匹配度87%)</td>
+              <td><button class="btn btn-outline btn-sm">联系双方</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        供应商审核队列
+        <a class="btn btn-outline btn-sm">导出审核列表</a>
+      </div>
+      <div class="card-body">
+        <table class="table">
+          <thead>
+            <tr><th>供应商名称</th><th>申请时间</th><th>资质状态</th><th>主营品类</th><th>审核员</th><th>操作</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>浙江纺织品有限公司</strong></td>
+              <td>今天 09:30</td>
+              <td><span class="tag tag-blue">待初审</span></td>
+              <td>纺织面料 / 服装辅料</td>
+              <td>—</td>
+              <td>
+                <button class="btn btn-primary btn-sm">审核</button>
+                <button class="btn btn-outline btn-sm">查看资料</button>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>山东食品加工厂</strong></td>
+              <td>昨天 14:20</td>
+              <td><span class="tag tag-orange">补充材料</span></td>
+              <td>食品生鲜 / 调味品</td>
+              <td>张审核员</td>
+              <td>
+                <button class="btn btn-outline btn-sm">催办</button>
+                <button class="btn btn-outline btn-sm">备注</button>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>广东电子配件厂</strong></td>
+              <td>前天 11:15</td>
+              <td><span class="tag tag-green">终审通过</span></td>
+              <td>电子元器件 / 配件</td>
+              <td>李审核员</td>
+              <td>
+                <button class="btn btn-outline btn-sm">发放入驻通知</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+// 角色切换逻辑
+const roleConfig = {
+  buyer: {
+    pages: ['dashboard', 'publish', 'match', 'compare', 'sample', 'market'],
+    navLabels: ['工作台', '发布需求', '智能匹配', '比价看板', '样品管理', '市场情报'],
+    userInfo: '欢迎回来，张采购 | 采购商 ID: 198****5993'
+  },
+  supplier: {
+    pages: ['supplier'],
+    navLabels: ['供应商工作台'],
+    userInfo: '供应商：临沂五金制品厂 | ID: SUP-20240609'
+  },
+  operator: {
+    pages: ['operation'],
+    navLabels: ['运营工作台'],
+    userInfo: '运营管理员：平台运营部 | 权限：超级管理员'
+  }
+};
+
+function switchRole(role) {
+  const config = roleConfig[role];
+  const headerUser = document.querySelector('.user-info');
+  const navTabs = document.querySelector('#navTabs');
+  
+  // 更新用户信息
+  if (headerUser) headerUser.textContent = config.userInfo;
+  
+  // 更新导航
+  navTabs.innerHTML = '';
+  config.pages.forEach((page, index) => {
+    const tab = document.createElement('a');
+    tab.className = 'nav-tab' + (index === 0 ? ' active' : '');
+    tab.dataset.page = page;
+    tab.textContent = config.navLabels[index];
+    navTabs.appendChild(tab);
+  });
+  
+  // 获取所有可能的页面
+  const allPages = ['dashboard', 'publish', 'match', 'compare', 'sample', 'market', 'supplier', 'operation'];
+  
+  // 隐藏所有页面
+  allPages.forEach(page => {
+    const pageEl = document.getElementById('page-' + page);
+    if (pageEl) {
+      pageEl.classList.remove('active');
+      pageEl.style.display = 'none';
+    }
+  });
+  
+  // 显示当前角色的所有页面
+  config.pages.forEach(page => {
+    const pageEl = document.getElementById('page-' + page);
+    if (pageEl) {
+      pageEl.style.display = 'block';
+    }
+  });
+  
+  // 重新绑定导航点击事件
+  document.querySelectorAll('.nav-tab').forEach(tab => {
+    tab.addEventListener('click', function(e) {
+      e.preventDefault();
+      switchTab(this.dataset.page);
+    });
+  });
+  
+  // 切换到第一个页面
+  switchTab(config.pages[0]);
+}
+
+function switchTab(pageName) {
+  // 移除所有页面的active状态
+  document.querySelectorAll('.page').forEach(p => {
+    p.classList.remove('active');
+  });
+  
+  // 激活目标页面
+  const page = document.getElementById('page-' + pageName);
+  if (page) {
+    page.classList.add('active');
+  }
+  
+  // 更新导航标签状态
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  const tab = document.querySelector('[data-page="' + pageName + '"]');
+  if (tab) tab.classList.add('active');
+  
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ========== 业务交互处理 ==========
+
+// 显示提示
+function showToast(message, type = 'info') {
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  
+  setTimeout(() => toast.classList.add('show'), 10);
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+}
+
+// 更新页面统计
+function updateStats() {
+  if (!window.businessFlow) return;
+  
+  const stats = window.businessFlow.getStats();
+  
+  // 更新采购商工作台统计
+  document.querySelectorAll('.stat-card').forEach(card => {
+    const numEl = card.querySelector('.stat-num');
+    const labelEl = card.querySelector('.stat-label');
+    
+    if (numEl && labelEl) {
+      const label = labelEl.textContent.trim();
+      if (label.includes('待处理需求')) numEl.textContent = stats.published;
+      if (label.includes('匹配中')) numEl.textContent = stats.matching;
+      if (label.includes('待报价')) numEl.textContent = stats.quoted;
+      if (label.includes('待比价')) numEl.textContent = stats.compared;
+    }
+  });
+  
+  // 更新供应商工作台统计
+  const supplierStats = {
+    pendingQuotes: stats.quoted + stats.compared,
+    activeQuotes: stats.sampled + stats.intervened,
+    completedOrders: stats.contracted + stats.paid + stats.completed
+  };
+  
+  // 更新运营工作台统计
+  const operationStats = {
+    totalOpportunities: stats.total,
+    needIntervention: stats.sampled,
+    completedInterventions: stats.intervened
+  };
+}
+
+// ========== 采购商端交互 ==========
+
+// 发布需求
+function handlePublishDemand(button) {
+  button.disabled = true;
+  button.innerHTML = '<span class="loading">发布中...</span>';
+  
+  // 获取表单数据
+  const formData = {
+    title: '不锈钢餐具采购',
+    buyer: '上海餐饮集团',
+    category: '日用百货/餐具',
+    quantity: 1000,
+    budget: [15000, 20000]
+  };
+  
+  setTimeout(() => {
+    // 创建需求
+    const opportunity = window.businessFlow.createOpportunity(formData);
+    
+    button.disabled = false;
+    button.textContent = '已发布';
+    button.classList.add('btn-success');
+    
+    // 显示成功提示
+    showToast(`需求发布成功！需求ID: ${opportunity.id}`, 'success');
+    
+    // 自动跳转到智能匹配页面
+    setTimeout(() => {
+      switchTab('match');
+      showToast(`系统正在为您匹配供应商...`, 'info');
+    }, 1000);
+    
+    // 更新统计
+    updateStats();
+  }, 1500);
+}
+
+// 加入比价
+function handleAddToComparison(button, supplierName) {
+  button.disabled = true;
+  button.innerHTML = '<span class="loading">添加中...</span>';
+  
+  setTimeout(() => {
+    // 获取当前需求ID（这里用第一个需求作为示例）
+    const opportunities = window.businessFlow.getOpportunities();
+    if (opportunities.length === 0) {
+      showToast('请先发布需求', 'warning');
+      button.disabled = false;
+      button.textContent = '加入比价';
+      return;
+    }
+    
+    const currentOpportunity = opportunities[0];
+    
+    // 模拟创建报价
+    const quoteData = {
+      opportunityId: currentOpportunity.id,
+      supplier: supplierName,
+      price: supplierName.includes('临沂不锈钢') ? 8.5 : 
+             supplierName.includes('义乌五金') ? 9.2 : 10.5,
+      deliveryDays: supplierName.includes('临沂不锈钢') ? 25 : 
+                    supplierName.includes('义乌五金') ? 30 : 20,
+      samplePolicy: supplierName.includes('临沂不锈钢') ? 'free' : 'paid'
+    };
+    
+    const quote = window.businessFlow.createQuote(quoteData);
+    
+    // 添加到比价
+    window.businessFlow.addToComparison(currentOpportunity.id, [quote.id]);
+    
+    button.disabled = false;
+    button.textContent = '已加入';
+    button.classList.add('btn-success');
+    
+    showToast(`${supplierName} 已加入比价列表`, 'success');
+    
+    // 自动跳转到比价页面
+    setTimeout(() => {
+      switchTab('compare');
+      showToast('已跳转到比价看板，可查看详细对比', 'info');
+    }, 800);
+    
+    updateStats();
+  }, 1200);
+}
+
+// ========== 供应商端交互 ==========
+
+// 显示报价模板弹窗
+function showTemplateModal() {
+  const modalHtml = `
+    <div class="modal-overlay" id="templateModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>新建报价模板</h3>
+          <button class="modal-close" onclick="closeModal('templateModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">模板名称</label>
+            <input class="form-input" type="text" placeholder="如：不锈钢产品报价模板" id="templateName">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">产品品类</label>
+              <select class="form-select" id="templateCategory">
+                <option value="">请选择</option>
+                <option value="日用百货">日用百货</option>
+                <option value="五金机电">五金机电</option>
+                <option value="辅料包装">辅料包装</option>
+                <option value="纺织服装">纺织服装</option>
+                <option value="电子电器">电子电器</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">默认交期（天）</label>
+              <input class="form-input" type="number" placeholder="25" id="templateDelivery">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">产品明细</label>
+            <div style="border:1px dashed #d9d9d9; border-radius:4px; padding:12px; margin-bottom:8px;">
+              <div class="form-row" style="margin-bottom:8px;">
+                <div class="form-group" style="margin-bottom:0;">
+                  <label class="form-label" style="font-size:12px;">产品名称</label>
+                  <input class="form-input" type="text" placeholder="不锈钢餐具套装" style="font-size:12px;">
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                  <label class="form-label" style="font-size:12px;">规格</label>
+                  <input class="form-input" type="text" placeholder="24件套" style="font-size:12px;">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group" style="margin-bottom:0;">
+                  <label class="form-label" style="font-size:12px;">单价（元）</label>
+                  <input class="form-input" type="number" step="0.01" placeholder="8.5" style="font-size:12px;">
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                  <label class="form-label" style="font-size:12px;">最小起订量</label>
+                  <input class="form-input" type="number" placeholder="100" style="font-size:12px;">
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-outline btn-sm" style="width:100%;">+ 添加产品行</button>
+          </div>
+          <div class="form-group">
+            <label class="form-label">付款条件</label>
+            <select class="form-select" id="templatePayment">
+              <option value="T/T 30%预付款">T/T 30%预付款</option>
+              <option value="T/T 50%预付款">T/T 50%预付款</option>
+              <option value="L/C at sight">L/C at sight</option>
+              <option value="D/P">D/P</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">备注说明</label>
+            <textarea class="form-textarea" id="templateNotes" placeholder="产品质量标准、包装要求、运输方式等..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" onclick="closeModal('templateModal')">取消</button>
+          <button class="btn btn-primary" onclick="submitTemplate()">保存模板</button>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  document.body.insertAdjacentHTML('beforeend', modalHtml);
+}
+
+// 提交报价模板
+function submitTemplate() {
+  const name = document.getElementById('templateName').value;
+  const category = document.getElementById('templateCategory').value;
+  
+  if (!name) {
+    showToast('请填写模板名称', 'warning');
+    return;
+  }
+  
+  closeModal('templateModal');
+  showToast(`报价模板「${name}」保存成功！`, 'success');
+}
+
+// 显示报价弹窗
+function showQuoteModal(opportunityId, demandTitle) {
+  const modalHtml = `
+    <div class="modal-overlay" id="quoteModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>报价提交</h3>
+          <button class="modal-close" onclick="closeModal('quoteModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">需求名称</label>
+            <input class="form-input" type="text" value="${demandTitle}" readonly>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">单价（元/件）</label>
+              <input class="form-input" type="number" step="0.01" placeholder="8.5" id="quotePrice">
+            </div>
+            <div class="form-group">
+              <label class="form-label">交期（天）</label>
+              <input class="form-input" type="number" placeholder="25" id="quoteDelivery">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">样品政策</label>
+              <select class="form-select" id="quoteSamplePolicy">
+                <option value="free">免费样品</option>
+                <option value="paid">付费样品</option>
+                <option value="self">自取样品</option>
+              </select>
+            </div>
+            <div class="form-group" id="sampleFeeGroup" style="display:none;">
+              <label class="form-label">样品费（元）</label>
+              <input class="form-input" type="number" placeholder="20" id="quoteSampleFee">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">备注说明</label>
+            <textarea class="form-textarea" id="quoteNotes" placeholder="可提供免费样品，支持定制，最小起订量100件..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">附件上传</label>
+            <div style="border:1px dashed #d9d9d9; border-radius:4px; padding:16px; text-align:center; cursor:pointer; color:#999;">
+              + 上传产品图片/资质证明（最多3个文件）
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" onclick="closeModal('quoteModal')">取消</button>
+          <button class="btn btn-primary" onclick="submitQuote('${opportunityId}', '${demandTitle}')">提交报价</button>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  document.body.insertAdjacentHTML('beforeend', modalHtml);
+  
+  // 样品政策切换显示样品费
+  document.getElementById('quoteSamplePolicy').addEventListener('change', function() {
+    document.getElementById('sampleFeeGroup').style.display = this.value === 'paid' ? 'block' : 'none';
+  });
+}
+
+// 显示寄样弹窗
+function showSampleModal(quoteId, supplierName) {
+  const modalHtml = `
+    <div class="modal-overlay" id="sampleModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>样品寄送</h3>
+          <button class="modal-close" onclick="closeModal('sampleModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">供应商</label>
+            <input class="form-input" type="text" value="${supplierName}" readonly>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">物流公司</label>
+              <select class="form-select" id="sampleLogistics">
+                <option value="顺丰速运">顺丰速运</option>
+                <option value="圆通速递">圆通速递</option>
+                <option value="中通快递">中通快递</option>
+                <option value="韵达快递">韵达快递</option>
+                <option value="德邦物流">德邦物流</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">运单号</label>
+              <input class="form-input" type="text" placeholder="SF1234567890" id="sampleTrackingNo">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">预计到达时间</label>
+              <input class="form-input" type="date" id="sampleEta">
+            </div>
+            <div class="form-group">
+              <label class="form-label">样品数量</label>
+              <input class="form-input" type="number" value="1" id="sampleQuantity">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">寄样备注</label>
+            <textarea class="form-textarea" id="sampleNotes" placeholder="样品已包装完好，附产品说明书..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">样品照片</label>
+            <div style="border:1px dashed #d9d9d9; border-radius:4px; padding:16px; text-align:center; cursor:pointer; color:#999;">
+              + 上传样品包装照片（最多2张）
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" onclick="closeModal('sampleModal')">取消</button>
+          <button class="btn btn-primary" onclick="submitSample('${quoteId}')">确认寄样</button>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  document.body.insertAdjacentHTML('beforeend', modalHtml);
+  
+  // 设置默认日期为明天
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  document.getElementById('sampleEta').value = tomorrow.toISOString().split('T')[0];
+}
+
+// 关闭弹窗
+function closeModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) modal.remove();
+}
+
+// 提交报价
+function submitQuote(opportunityId, demandTitle) {
+  const price = parseFloat(document.getElementById('quotePrice').value);
+  const deliveryDays = parseInt(document.getElementById('quoteDelivery').value);
+  const samplePolicy = document.getElementById('quoteSamplePolicy').value;
+  const sampleFee = samplePolicy === 'paid' ? parseFloat(document.getElementById('quoteSampleFee').value) : 0;
+  const notes = document.getElementById('quoteNotes').value;
+  
+  if (!price || !deliveryDays) {
+    showToast('请填写单价和交期', 'warning');
+    return;
+  }
+  
+  const quoteData = {
+    opportunityId: opportunityId,
+    supplier: '临沂五金制品厂',
+    price: price,
+    deliveryDays: deliveryDays,
+    samplePolicy: samplePolicy,
+    sampleFee: sampleFee,
+    notes: notes
+  };
+  
+  const quote = window.businessFlow.createQuote(quoteData);
+  
+  closeModal('quoteModal');
+  showToast(`报价提交成功！报价ID: ${quote.id}`, 'success');
+  
+  // 更新统计
+  const pendingEl = document.querySelector('.stat-card:nth-child(1) .stat-num');
+  if (pendingEl) {
+    const current = parseInt(pendingEl.textContent) || 0;
+    if (current > 0) pendingEl.textContent = current - 1;
+  }
+  
+  updateStats();
+}
+
+// 提交寄样
+function submitSample(quoteId) {
+  const logistics = document.getElementById('sampleLogistics').value;
+  const trackingNo = document.getElementById('sampleTrackingNo').value;
+  const eta = document.getElementById('sampleEta').value;
+  const quantity = parseInt(document.getElementById('sampleQuantity').value);
+  const notes = document.getElementById('sampleNotes').value;
+  
+  if (!trackingNo) {
+    showToast('请填写运单号', 'warning');
+    return;
+  }
+  
+  const sampleData = {
+    quoteId: quoteId,
+    logistics: logistics,
+    trackingNo: trackingNo,
+    eta: eta,
+    quantity: quantity,
+    notes: notes,
+    status: 'shipped'
+  };
+  
+  window.businessFlow.updateSample(sampleData);
+  
+  closeModal('sampleModal');
+  showToast(`样品寄送成功！运单号: ${trackingNo}`, 'success');
+  
+  // 更新样品状态
+  const sampleEl = document.querySelector('.stat-card:nth-child(2) .stat-num');
+  if (sampleEl) {
+    const current = parseInt(sampleEl.textContent) || 0;
+    if (current > 0) sampleEl.textContent = current - 1;
+  }
+  
+  updateStats();
+}
+
+// 立即报价（弹窗版本）
+function handleSubmitQuote(button, demandTitle) {
+  // 获取当前需求
+  const opportunities = window.businessFlow.getOpportunities('matching');
+  if (opportunities.length === 0) {
+    showToast('暂无待报价需求', 'warning');
+    return;
+  }
+  
+  const opportunity = opportunities.find(o => o.title.includes(demandTitle)) || opportunities[0];
+  
+  showQuoteModal(opportunity.id, demandTitle);
+}
+
+// ========== 通用弹窗 ==========
+
+// 确认弹窗
+function showConfirmModal(title, message, onConfirm) {
+  const modalHtml = `
+    <div class="modal-overlay" id="confirmModal">
+      <div class="modal-content" style="width:420px;">
+        <div class="modal-header">
+          <h3>${title}</h3>
+          <button class="modal-close" onclick="closeModal('confirmModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p style="font-size:14px;color:#555;line-height:1.6;">${message}</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" onclick="closeModal('confirmModal')">取消</button>
+          <button class="btn btn-primary" id="confirmBtn">确认</button>
+        </div>
+      </div>
+    </div>`;
+  document.body.insertAdjacentHTML('beforeend', modalHtml);
+  document.getElementById('confirmBtn').addEventListener('click', function() {
+    closeModal('confirmModal');
+    if (onConfirm) onConfirm();
+  });
+}
+
+// 信息展示弹窗
+function showInfoModal(title, rows) {
+  let rowsHtml = rows.map(r => `
+    <div class="info-row">
+      <span class="info-label">${r.label}</span>
+      <span class="info-value">${r.value}</span>
+    </div>`).join('');
+  
+  const modalHtml = `
+    <div class="modal-overlay" id="infoModal">
+      <div class="modal-content" style="width:480px;">
+        <div class="modal-header">
+          <h3>${title}</h3>
+          <button class="modal-close" onclick="closeModal('infoModal')">&times;</button>
+        </div>
+        <div class="modal-body">${rowsHtml}</div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" onclick="closeModal('infoModal')">关闭</button>
+        </div>
+      </div>
+    </div>`;
+  document.body.insertAdjacentHTML('beforeend', modalHtml);
+}
+
+// 表单弹窗（通用）
+function showFormModal(title, fields, onSubmit) {
+  let fieldsHtml = fields.map(f => {
+    if (f.type === 'select') {
+      let opts = f.options.map(o => `<option value="${o}">${o}</option>`).join('');
+      return `<div class="form-group"><label class="form-label">${f.label}</label><select class="form-select" id="${f.id}">${opts}</select></div>`;
+    }
+    if (f.type === 'textarea') {
+      return `<div class="form-group"><label class="form-label">${f.label}</label><textarea class="form-textarea" id="${f.id}" placeholder="${f.placeholder || ''}"></textarea></div>`;
+    }
+    if (f.type === 'date') {
+      return `<div class="form-group"><label class="form-label">${f.label}</label><input class="form-input" type="date" id="${f.id}"></div>`;
+    }
+    if (f.type === 'readonly') {
+      return `<div class="form-group"><label class="form-label">${f.label}</label><input class="form-input" type="text" value="${f.value || ''}" readonly></div>`;
+    }
+    return `<div class="form-group"><label class="form-label">${f.label}</label><input class="form-input" type="${f.type || 'text'}" placeholder="${f.placeholder || ''}" id="${f.id}"></div>`;
+  }).join('');
+  
+  const modalHtml = `
+    <div class="modal-overlay" id="formModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>${title}</h3>
+          <button class="modal-close" onclick="closeModal('formModal')">&times;</button>
+        </div>
+        <div class="modal-body">${fieldsHtml}</div>
+        <div class="modal-footer">
+          <button class="btn btn-outline" onclick="closeModal('formModal')">取消</button>
+          <button class="btn btn-primary" id="formSubmitBtn">提交</button>
+        </div>
+      </div>
+    </div>`;
+  document.body.insertAdjacentHTML('beforeend', modalHtml);
+  document.getElementById('formSubmitBtn').addEventListener('click', function() {
+    const data = {};
+    fields.forEach(f => {
+      const el = document.getElementById(f.id);
+      if (el) data[f.id] = el.value;
+    });
+    closeModal('formModal');
+    if (onSubmit) onSubmit(data);
+  });
+}
+
+// ========== 采购商端弹窗 ==========
+
+function showPublishConfirmModal() {
+  showConfirmModal('发布需求', '确认发布「不锈钢餐具采购」需求？发布后将进入智能匹配流程。', function() {
+    handlePublishDemand(document.querySelector('.btn-publish'));
+  });
+}
+
+function showDraftSavedModal() {
+  showConfirmModal('保存草稿', '确认保存当前需求为草稿？草稿可在「需求管理」中继续编辑。', function() {
+    showToast('草稿已保存', 'success');
+  });
+}
+
+function showDetailModal(context) {
+  const id = context.id || 'OPP-20240609001';
+  const name = context.name || '不锈钢餐具采购';
+  showInfoModal('需求详情', [
+    {label: '需求编号', value: id},
+    {label: '需求名称', value: name},
+    {label: '采购商', value: context.buyer || '上海餐饮集团'},
+    {label: '品类', value: context.category || '日用百货 / 餐具'},
+    {label: '数量', value: context.qty || '1000件'},
+    {label: '预算', value: context.budget || '¥15,000-20,000'},
+    {label: '截止时间', value: context.deadline || '2024-06-15 18:00'},
+    {label: '状态', value: '<span class="tag tag-green">匹配中</span>'},
+    {label: '备注', value: context.notes || '需符合食品级不锈钢标准，提供质检报告'}
+  ]);
+}
+
+function showSampleRequestModal(context) {
+  const demandTitle = context.name || context.demandTitle || '不锈钢餐具采购';
+  showFormModal('申请样品', [
+    {id: 'sampleDemand', label: '需求名称', type: 'readonly', value: demandTitle},
+    {id: 'sampleSupplier', label: '供应商', type: 'readonly', value: context.supplier || '临沂五金制品厂'},
+    {id: 'sampleQty', label: '样品数量', type: 'number', placeholder: '1'},
+    {id: 'sampleReason', label: '申请原因', type: 'textarea', placeholder: '需要确认产品质量和工艺水平...'},
+    {id: 'sampleAddress', label: '收货地址', type: 'text', placeholder: '上海市浦东新区XX路XX号'},
+    {id: 'sampleContact', label: '联系人', type: 'text', placeholder: '张经理'},
+    {id: 'samplePhone', label: '联系电话', type: 'text', placeholder: '13800138000'}
+  ], function(data) {
+    showToast(`样品申请已提交，预计3-5个工作日送达`, 'success');
+    updateStats();
+  });
+}
+
+function showInquiryModal(context) {
+  const supplier = context.supplier || context.name || '临沂五金制品厂';
+  showFormModal('发送询价', [
+    {id: 'inquirySupplier', label: '供应商', type: 'readonly', value: supplier},
+    {id: 'inquirySubject', label: '询价主题', type: 'text', placeholder: '关于不锈钢餐具采购的询价'},
+    {id: 'inquiryQty', label: '意向数量', type: 'number', placeholder: '1000'},
+    {id: 'inquiryContent', label: '询价内容', type: 'textarea', placeholder: '请提供以下信息：\n1. FOB价格\n2. 最小起订量\n3. 交期\n4. 付款条件'},
+    {id: 'inquiryDeadline', label: '期望回复时间', type: 'date'}
+  ], function(data) {
+    showToast(`询价已发送至${supplier}`, 'success');
+    updateStats();
+  });
+}
+
+function showCancelConfirmModal(context) {
+  const orderId = context.id || context.orderId || 'QUO-20240609001';
+  showConfirmModal('取消申请', `确认取消样品申请「${orderId}」？取消后不可恢复。`, function() {
+    showToast(`样品申请 ${orderId} 已取消`, 'success');
+    updateStats();
+  });
+}
+
+function showLogisticsModal(context) {
+  const trackingNo = context.tracking || 'SF1234567890';
+  showInfoModal('物流跟踪', [
+    {label: '运单号', value: trackingNo},
+    {label: '物流公司', value: context.logistics || '顺丰速运'},
+    {label: '发件方', value: context.sender || '临沂五金制品厂'},
+    {label: '当前状态', value: '<span class="tag tag-blue">运输中</span>'},
+    {label: '当前位置', value: context.location || '上海市浦东分拣中心'},
+    {label: '预计送达', value: context.eta || '2024-06-13'},
+    {label: '物流轨迹', value: '06-10 发货 → 06-11 临沂集散 → 06-12 到达上海'}
+  ]);
+}
+
+function showReviewModal(context) {
+  const orderId = context.id || context.orderId || 'QUO-20240609001';
+  showFormModal('填写评价', [
+    {id: 'reviewOrderId', label: '订单编号', type: 'readonly', value: orderId},
+    {id: 'reviewScore', label: '综合评分', type: 'select', options: ['★★★★★ 非常满意', '★★★★ 满意', '★★★ 一般', '★★ 不满意', '★ 非常不满意']},
+    {id: 'reviewQuality', label: '产品质量', type: 'select', options: ['5分', '4分', '3分', '2分', '1分']},
+    {id: 'reviewDelivery', label: '交期时效', type: 'select', options: ['5分', '4分', '3分', '2分', '1分']},
+    {id: 'reviewService', label: '服务态度', type: 'select', options: ['5分', '4分', '3分', '2分', '1分']},
+    {id: 'reviewContent', label: '评价内容', type: 'textarea', placeholder: '产品质量符合预期，交期准时...'}
+  ], function(data) {
+    showToast('评价提交成功，感谢您的反馈！', 'success');
+    updateStats();
+  });
+}
+
+// ========== 供应商端弹窗 ==========
+
+function showSmartRecommendModal() {
+  showFormModal('智能推荐设置', [
+    {id: 'recommendCategory', label: '目标品类', type: 'select', options: ['全部品类', '日用百货', '五金机电', '辅料包装', '纺织服装', '电子电器']},
+    {id: 'recommendRegion', label: '采购商地区', type: 'select', options: ['不限', '华东', '华南', '华北', '华中', '西南']},
+    {id: 'recommendBudget', label: '预算范围（元）', type: 'text', placeholder: '10000-50000'},
+    {id: 'recommendMatch', label: '最低匹配度', type: 'select', options: ['不限', '70%以上', '80%以上', '90%以上']}
+  ], function(data) {
+    const cat = data.recommendCategory === '全部品类' ? '全部' : data.recommendCategory;
+    showToast(`已按「${cat}」品类筛选推荐结果，共匹配 12 条商机`, 'success');
+  });
+}
+
+function showEditQuoteModal(context) {
+  const quoteId = context.id || context.quoteId || 'QUO-20240609001';
+  const qty = context.qty || '1000件';
+  showFormModal('修改报价', [
+    {id: 'editQuoteId', label: '报价单号', type: 'readonly', value: quoteId},
+    {id: 'editPrice', label: '单价（元/件）', type: 'number', placeholder: '18.5'},
+    {id: 'editDelivery', label: '交期（天）', type: 'number', placeholder: '20'},
+    {id: 'editQty', label: '可供应数量', type: 'number', placeholder: qty},
+    {id: 'editPayment', label: '付款条件', type: 'select', options: ['T/T 30%预付款', 'T/T 50%预付款', 'L/C at sight', 'D/P']},
+    {id: 'editNotes', label: '修改说明', type: 'textarea', placeholder: '说明修改原因...'}
+  ], function(data) {
+    showToast(`报价 ${quoteId} 修改成功`, 'success');
+    updateStats();
+  });
+}
+
+function showRemindModal(context) {
+  const orderId = context.id || context.orderId || 'QUO-20240607003';
+  showConfirmModal('催单提醒', `确认向采购商发送催单提醒「${orderId}」？`, function() {
+    showToast('催单提醒已发送，采购商将收到通知', 'success');
+  });
+}
+
+// ========== 运营端弹窗 ==========
+
+function showManualMatchModal() {
+  showFormModal('人工撮合', [
+    {id: 'matchDemand', label: '需求编号', type: 'text', placeholder: 'OPP-20240609001'},
+    {id: 'matchSupplier', label: '推荐供应商', type: 'text', placeholder: '临沂不锈钢厂'},
+    {id: 'matchReason', label: '撮合理由', type: 'textarea', placeholder: '该供应商主营不锈钢制品，产能充足，历史评价优秀...'},
+    {id: 'matchPriority', label: '优先级', type: 'select', options: ['高优先级', '普通', '低优先级']}
+  ], function(data) {
+    showToast(`已向「${data.matchSupplier}」推送商机「${data.matchDemand}」`, 'success');
+    updateStats();
+  });
+}
+
+function showPushNotifyModal() {
+  showFormModal('推送提醒', [
+    {id: 'pushTarget', label: '推送对象', type: 'select', options: ['指定供应商', '全部匹配供应商', '未报价供应商']},
+    {id: 'pushTitle', label: '提醒标题', type: 'text', placeholder: '新的商机匹配，请及时查看'},
+    {id: 'pushContent', label: '提醒内容', type: 'textarea', placeholder: '您有一条新的商机匹配，请尽快登录系统查看详情并提交报价...'},
+    {id: 'pushUrgent', label: '紧急程度', type: 'select', options: ['普通通知', '重要提醒', '紧急通知']}
+  ], function(data) {
+    showToast('推送提醒已发送', 'success');
+    updateStats();
+  });
+}
+
+function showContactModal() {
+  showFormModal('联系双方', [
+    {id: 'contactDemand', label: '需求编号', type: 'text', placeholder: 'OPP-20240609001'},
+    {id: 'contactMethod', label: '联系方式', type: 'select', options: ['站内消息', '电话联系', '邮件通知', '微信通知']},
+    {id: 'contactContent', label: '沟通内容', type: 'textarea', placeholder: '请双方尽快完成报价确认...'}
+  ], function(data) {
+    showToast('已通过' + data.contactMethod + '联系双方', 'success');
+  });
+}
+
+function showAuditModal(context) {
+  const supplierId = context.id || context.supplierId || '临沂五金制品厂';
+  showFormModal('供应商审核', [
+    {id: 'auditSupplier', label: '供应商名称', type: 'readonly', value: supplierId},
+    {id: 'auditResult', label: '审核结果', type: 'select', options: ['审核通过', '材料不齐全-需补充', '审核不通过']},
+    {id: 'auditComment', label: '审核意见', type: 'textarea', placeholder: '请填写审核意见...'}
+  ], function(data) {
+    showToast(`供应商「${supplierId}」审核完成：${data.auditResult}`, 'success');
+    updateStats();
+  });
+}
+
+function showProfileModal(context) {
+  const supplierId = context.id || context.supplierId || '临沂五金制品厂';
+  showInfoModal('供应商资料', [
+    {label: '企业名称', value: supplierId},
+    {label: '统一社会信用代码', value: '91371300MA3XXXXXXX'},
+    {label: '注册资金', value: '500万元'},
+    {label: '成立时间', value: '2015-03-18'},
+    {label: '主营品类', value: '五金机电、日用百货'},
+    {label: '年营业额', value: '2000-3000万元'},
+    {label: '员工规模', value: '50-100人'},
+    {label: '资质认证', value: 'ISO9001、CE认证'},
+    {label: '联系电话', value: '0539-888XXXX'},
+    {label: '企业地址', value: '山东省临沂市兰山区XX路XX号'}
+  ]);
+}
+
+function showUrgeModal(context) {
+  const orderId = context.id || context.orderId || 'OPP-20240609001';
+  showConfirmModal('催办处理', `确认向相关方发送催办通知「${orderId}」？`, function() {
+    showToast('催办通知已发送', 'success');
+  });
+}
+
+function showNoteModal(context) {
+  const orderId = context.id || context.orderId || 'OPP-20240609001';
+  showFormModal('添加备注', [
+    {id: 'noteOrderId', label: '关联编号', type: 'readonly', value: orderId},
+    {id: 'noteType', label: '备注类型', type: 'select', options: ['内部备注', '对外备注', '风险备注']},
+    {id: 'noteContent', label: '备注内容', type: 'textarea', placeholder: '请输入备注内容...'}
+  ], function(data) {
+    showToast('备注已保存', 'success');
+  });
+}
+
+function showNotifyModal(context) {
+  const supplierId = context.id || context.supplierId || '临沂五金制品厂';
+  showFormModal('发放入驻通知', [
+    {id: 'notifySupplier', label: '供应商', type: 'readonly', value: supplierId},
+    {id: 'notifyType', label: '通知类型', type: 'select', options: ['入驻成功通知', '资料补充通知', '资质到期提醒']},
+    {id: 'notifyTitle', label: '通知标题', type: 'text', placeholder: '入驻审核结果通知'},
+    {id: 'notifyContent', label: '通知内容', type: 'textarea', placeholder: '尊敬的供应商，您的入驻申请已审核通过...'}
+  ], function(data) {
+    showToast(`入驻通知已发送至「${supplierId}」`, 'success');
+  });
+}
+
+// ========== 平台运营端交互（原有） ==========
+
+// 人工推荐
+function handleManualIntervention(button, opportunityId) {
+  button.disabled = true;
+  button.innerHTML = '<span class="loading">干预中...</span>';
+  
+  setTimeout(() => {
+    // 创建干预记录
+    const interventionData = {
+      opportunityId: opportunityId,
+      type: 'manual_match',
+      operator: '平台运营',
+      action: '人工推荐供应商临沂不锈钢厂',
+      result: '推荐成功，供应商已重新报价'
+    };
+    
+    const intervention = window.businessFlow.createIntervention(interventionData);
+    
+    button.disabled = false;
+    button.textContent = '已推荐';
+    button.classList.add('btn-success');
+    
+    showToast(`干预成功！已人工推荐供应商`, 'success');
+    
+    // 更新运营工作台统计
+    const interventionEl = document.querySelector('.stat-card-large:nth-child(4) .stat-num');
+    if (interventionEl) {
+      const current = parseFloat(interventionEl.textContent) || 0;
+      interventionEl.textContent = (current + 0.5).toFixed(1);
+    }
+    
+    updateStats();
+  }, 1200);
+}
+
+// ========== 统一按钮路由 ==========
+
+// 按钮文本 → 弹窗函数映射
+const BTN_ACTIONS = {
+  '保存草稿': showDraftSavedModal,
+  '查看详情': showDetailModal,
+  '申请样品': showSampleRequestModal,
+  '发送询价': showInquiryModal,
+  '取消申请': showCancelConfirmModal,
+  '查看物流': showLogisticsModal,
+  '填写评价': showReviewModal,
+  '智能推荐': showSmartRecommendModal,
+  '修改': showEditQuoteModal,
+  '催单': showRemindModal,
+  '人工撮合': showManualMatchModal,
+  '推送提醒': showPushNotifyModal,
+  '联系双方': showContactModal,
+  '审核': showAuditModal,
+  '查看资料': showProfileModal,
+  '催办': showUrgeModal,
+  '备注': showNoteModal,
+  '发放入驻通知': showNotifyModal
+};
+
+// 提取按钮上下文信息
+function getButtonContext(btn) {
+  const row = btn.closest('tr') || btn.closest('.match-card') || btn.closest('.card');
+  if (!row) return {};
+  
+  const cells = row.querySelectorAll('td');
+  const context = {};
+  
+  const firstCell = cells[0];
+  if (firstCell) {
+    const code = firstCell.querySelector('code');
+    const strong = firstCell.querySelector('strong');
+    context.name = (strong || firstCell).textContent.trim().replace(/\s*\(.*?\)\s*/, '');
+    context.id = code ? code.textContent.trim() : '';
+  }
+  
+  if (cells[1]) context.buyer = cells[1].textContent.trim();
+  if (cells[2]) context.category = cells[2].textContent.trim();
+  if (cells[3]) context.match = cells[3].textContent.trim();
+  if (cells[4]) context.budget = cells[4].textContent.trim();
+  if (cells[5]) context.deadline = cells[5].textContent.trim();
+  
+  return context;
+}
+
+// 绑定所有按钮事件
+function bindButtonEvents() {
+  // 发布需求
+  document.querySelectorAll('.btn-publish').forEach(btn => {
+    btn.addEventListener('click', () => showPublishConfirmModal());
+  });
+  
+  // 加入比价
+  document.querySelectorAll('.btn-compare').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const ctx = getButtonContext(btn);
+      handleAddToComparison(btn, ctx.name || '供应商');
+    });
+  });
+  
+  // 立即报价
+  document.querySelectorAll('.btn-quote').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const ctx = getButtonContext(btn);
+      handleSubmitQuote(btn, ctx.name || '需求');
+    });
+  });
+  
+  // 运营干预
+  document.querySelectorAll('.btn-intervene').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const ctx = getButtonContext(btn);
+      handleManualIntervention(btn, ctx.id || 'OPP-20240609001');
+    });
+  });
+  
+  // 立即寄样
+  document.querySelectorAll('.btn-sample').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const ctx = getButtonContext(btn);
+      showSampleModal(ctx.id || 'QUO-20240608002', '临沂五金制品厂');
+    });
+  });
+  
+  // 其余按钮：根据文本自动匹配弹窗
+  document.querySelectorAll('.btn:not(.btn-publish):not(.btn-compare):not(.btn-quote):not(.btn-intervene):not(.btn-sample)').forEach(btn => {
+    if (btn.hasAttribute('data-page') || btn.closest('.modal-content')) return;
+    
+    const text = btn.textContent.trim();
+    const modalFn = BTN_ACTIONS[text];
+    
+    if (modalFn) {
+      btn.addEventListener('click', () => {
+        const ctx = getButtonContext(btn);
+        modalFn(ctx);
+      });
+    }
+  });
+}
+
+// ========== 页面初始化 ==========
+
+function initBusinessFlow() {
+  // 监听数据更新事件
+  window.addEventListener('dataUpdated', updateStats);
+  
+  // 初始化统计
+  updateStats();
+  
+  // 显示欢迎提示
+  setTimeout(() => {
+    showToast('B2B业务交互系统已就绪，请开始您的业务流程！', 'info');
+  }, 500);
+}
+
+// 初始化
+document.addEventListener('DOMContentLoaded', function() {
+  const roleSelect = document.getElementById('roleSelect');
+  if (roleSelect) {
+    roleSelect.addEventListener('change', function() {
+      switchRole(this.value);
+      // 重新绑定按钮事件
+      setTimeout(bindButtonEvents, 100);
+    });
+  }
+  
+  document.querySelectorAll('.nav-tab').forEach(tab => {
+    tab.addEventListener('click', function(e) {
+      e.preventDefault();
+      switchTab(this.dataset.page);
+    });
+  });
+  
+  // 初始隐藏供应商和运营端页面
+  const supplierPage = document.getElementById('page-supplier');
+  const operationPage = document.getElementById('page-operation');
+  if (supplierPage) supplierPage.style.display = 'none';
+  if (operationPage) operationPage.style.display = 'none';
+  
+  // 绑定按钮事件
+  bindButtonEvents();
+  
+  // 初始化业务流
+  initBusinessFlow();
+});
+</script>
+
+</body>
+</html>
