@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大集商机平台业务流演示</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif; background: #f5f6fa; color: #333; padding: 20px; }
+.container { max-width: 1200px; margin: 0 auto; }
+h1 { color: #e60012; margin-bottom: 20px; }
+h2 { color: #333; margin: 30px 0 15px; border-left: 4px solid #e60012; padding-left: 12px; }
+
+/* 步骤卡片 */
+.steps-container { display: flex; flex-direction: column; gap: 16px; margin-bottom: 30px; }
+.step-card { background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-left: 4px solid #e60012; }
+.step-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.step-number { width: 32px; height: 32px; background: #e60012; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+.step-title { font-size: 16px; font-weight: 600; }
+.step-desc { color: #666; font-size: 14px; line-height: 1.5; margin-bottom: 15px; }
+
+/* 按钮 */
+.btn { display: inline-block; padding: 8px 20px; border-radius: 4px; font-size: 14px; cursor: pointer; border: none; transition: all 0.2s; margin-right: 10px; }
+.btn-primary { background: #e60012; color: #fff; }
+.btn-primary:hover { background: #c40010; }
+.btn-outline { background: #fff; color: #e60012; border: 1px solid #e60012; }
+.btn-outline:hover { background: #fff5f5; }
+.btn-success { background: #52c41a; color: #fff; }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* 状态指示器 */
+.status-indicator { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; font-size: 12px; margin-left: 10px; }
+.status-pending { background: #fff2e8; color: #fa541c; }
+.status-processing { background: #e6f7ff; color: #1890ff; }
+.status-completed { background: #f6ffed; color: #52c41a; }
+.status-failed { background: #fff1f0; color: #f5222d; }
+
+/* 进度条 */
+.progress-container { margin: 20px 0; }
+.progress-bar { height: 6px; background: #f0f0f0; border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, #e60012, #52c41a); transition: width 0.5s ease; }
+.progress-labels { display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; color: #999; }
+
+/* 数据面板 */
+.data-panel { background: #fff; border-radius: 8px; padding: 20px; margin: 20px 0; border: 1px solid #e8e8e8; }
+.data-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+.data-item { padding: 12px; background: #fafafa; border-radius: 4px; }
+.data-label { font-size: 12px; color: #999; margin-bottom: 4px; }
+.data-value { font-size: 18px; font-weight: bold; color: #e60012; }
+
+/* 提示 */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: rgba(0, 0, 0, 0.9);
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-size: 14px;
+  z-index: 1000;
+  transition: transform 0.3s ease;
+  max-width: 80%;
+  text-align: center;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast-success { background: rgba(82, 196, 26, 0.9); }
+.toast-warning { background: rgba(250, 173, 20, 0.9); }
+.toast-info { background: rgba(24, 144, 255, 0.9); }
+
+/* 角色切换 */
+.role-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+.role-tab { padding: 8px 16px; background: #fff; border: 1px solid #e8e8e8; border-radius: 4px; cursor: pointer; }
+.role-tab.active { background: #e60012; color: #fff; border-color: #e60012; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>大集商机平台 - 完整业务流演示</h1>
+  
+  <div class="role-tabs">
+    <div class="role-tab active" onclick="switchRole('buyer')">采购商端</div>
+    <div class="role-tab" onclick="switchRole('supplier')">供应商端</div>
+    <div class="role-tab" onclick="switchRole('operation')">平台运营端</div>
+  </div>
+  
+  <div class="progress-container">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+    </div>
+    <div class="progress-labels">
+      <span>发布需求</span>
+      <span>智能匹配</span>
+      <span>供应商报价</span>
+      <span>比价分析</span>
+      <span>样品确认</span>
+      <span>平台干预</span>
+      <span>合同签订</span>
+      <span>支付结算</span>
+      <span>交易完成</span>
+    </div>
+  </div>
+  
+  <div id="buyerPanel" class="role-panel">
+    <h2>采购商工作台</h2>
+    
+    <div class="data-panel">
+      <div class="data-grid">
+        <div class="data-item">
+          <div class="data-label">待处理需求</div>
+          <div class="data-value" id="statPublished">0</div>
+        </div>
+        <div class="data-item">
+          <div class="data-label">匹配中</div>
+          <div class="data-value" id="statMatching">0</div>
+        </div>
+        <div class="data-item">
+          <div class="data-label">待报价</div>
+          <div class="data-value" id="statQuoted">0</div>
+        </div>
+        <div class="data-item">
+          <div class="data-label">待比价</div>
+          <div class="data-value" id="statCompared">0</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="steps-container">
+      <!-- 步骤1 -->
+      <div class="step-card" id="step1">
+        <div class="step-header">
+          <div class="step-number">1</div>
+          <div class="step-title">发布采购需求</div>
+          <span class="status-indicator status-pending" id="status1">待开始</span>
+        </div>
+        <div class="step-desc">发布不锈钢餐具采购需求，数量1000件，预算1.5-2万元</div>
+        <button class="btn btn-primary" onclick="startStep(1)">开始发布需求</button>
+      </div>
+      
+      <!-- 步骤2 -->
+      <div class="step-card" id="step2">
+        <div class="step-header">
+          <div class="step-number">2</div>
+          <div class="step-title">系统智能匹配</div>
+          <span class="status-indicator status-pending" id="status2">等待中</span>
+        </div>
+        <div class="step-desc">系统自动匹配3家优质供应商：临沂不锈钢制品厂、义乌五金餐具厂、山东临沂五金厂</div>
+        <button class="btn btn-outline" onclick="startStep(2)" disabled>等待需求发布</button>
+      </div>
+      
+      <!-- 步骤3 -->
+      <div class="step-card" id="step3">
+        <div class="step-header">
+          <div class="step-number">3</div>
+          <div class="step-title">供应商接收报价</div>
+          <span class="status-indicator status-pending" id="status3">等待中</span>
+        </div>
+        <div class="step-desc">供应商端收到商机通知，准备报价</div>
+        <button class="btn btn-outline" onclick="startStep(3)" disabled>等待供应商操作</button>
+      </div>
+    </div>
+  </div>
+  
+  <div id="supplierPanel" class="role-panel" style="display:none">
+    <h2>供应商工作台</h2>
+    
+    <div class="data-panel">
+      <div class="data-grid">
+        <div class="data-item">
+          <div class="data-label">待报价需求</div>
+          <div class="data-value" id="statPendingQuotes">0</div>
+        </div>
+        <div class="data-item">
+          <div class="data-label">进行中报价</div>
+          <div class="data-value" id="statActiveQuotes">0</div>
+        </div>
+        <div class="data-item">
+          <div class="data-label">本月成交额</div>
+          <div class="data-value" id="statRevenue">¥0</div>
+        </div>
+        <div class="data-item">
+          <div class="data-label">服务评分</div>
+          <div class="data-value" id="statRating">0.0</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="steps-container">
+      <!-- 步骤4 -->
+      <div class="step-card" id="step4">
+        <div class="step-header">
+          <div class="step-number">4</div>
+          <div class="step-title">提交报价</div>
+          <span class="status-indicator status-pending" id="status4">等待中</span>
+        </div>
+        <div class="step-desc">为不锈钢餐具需求提交报价：8.5元/件，25天交期，支持免费样品</div>
+        <button class="btn btn-primary" onclick="startStep(4)" disabled>等待商机匹配</button>
+      </div>
+      
+      <!-- 步骤5 -->
+      <div class="step-card" id="step5">
+        <div class="step-header">
+          <div class="step-number">5</div>
+          <div class="step-title">采购商比价分析</div>
+          <span class="status-indicator status-pending" id="status5">等待中</span>
+        </div>
+        <div class="step-desc">采购商对比多家供应商报价，进行综合评估</div>
+        <button class="btn btn-outline" onclick="startStep(5)" disabled>等待报价提交</button>
+      </div>
+      
+      <!-- 步骤6 -->
+      <div class="step-card" id="step6">
+        <div class="step-header">
+          <div class="step-number">6</div>
+          <div class="step-title">样品申请与确认</div>
+          <span class="status-indicator status-pending" id="status6">等待中</span>
+        </div>
+        <div class="step-desc">采购商申请样品，供应商寄送样品，采购商确认样品质量</div>
+        <button class="btn btn-outline" onclick="startStep(6)" disabled>等待比价完成</button>
+      </div>
+    </div>
+  </div>
+  
+  <div id="operationPanel" class="role-panel" style="display:none">
+    <h2>平台运营中心</h2>
+    
+    <div class="data-panel">
+      <div class="data-grid">
+        <div class="data-item">
+          <div class="data-label">今日商机发布量</div>
+          <div class="data-value" id="statDailyOpp">0</div>
+        </div>
+        <div class="data-item">
+          <div class="data-label">活跃供应商数</div>
+          <div class="data-value" id="statActiveSuppliers">0</div>
+        </div>
+        <div class="data-item">
+          <div class="data-label">今日撮合成交额</div>
+          <div class="data-value" id="statDailyRevenue">¥0</div>
+        </div>
+        <div class="data-item">
+          <div class="data-label">供需匹配成功率</div>
+          <div class="data-value" id="statMatchRate">0%</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="steps-container">
+      <!-- 步骤7 -->
+      <div class="step-card" id="step7">
+        <div class="step-header">
+          <div class="step-number">7</div>
+          <div class="step-title">平台运营干预</div>
+          <span class="status-indicator status-pending" id="status7">等待中</span>
+        </div>
+        <div class="step-desc">人工撮合匹配失败的需求，审核供应商资质，提供专业建议</div>
+        <button class="btn btn-primary" onclick="startStep(7)" disabled>等待样品确认</button>
+      </div>
+      
+      <!-- 步骤8 -->
+      <div class="step-card" id="step8">
+        <div class="step-header">
+          <div class="step-number">8</div>
+          <div class="step-title">合同签订</div>
+          <span class="status-indicator status-pending" id="status8">等待中</span>
+        </div>
+        <div class="step-desc">生成电子合同，采购商和供应商双方在线确认签订</div>
+        <button class="btn btn-outline" onclick="startStep(8)" disabled>等待平台干预</button>
+      </div>
+      
+      <!-- 步骤9 -->
+      <div class="step-card" id="step9">
+        <div class="step-header">
+          <div class="step-number">9</div>
+          <div class="step-title">支付结算</div>
+          <span class="status-indicator status-pending" id="status9">等待中</span>
+        </div>
+        <div class="step-desc">采购商在线支付，平台担保交易，供应商收到款项</div>
+        <button class="btn btn-outline" onclick="startStep(9)" disabled>等待合同签订</button>
+      </div>
+      
+      <!-- 步骤10 -->
+      <div class="step-card" id="step10">
+        <div class="step-header">
+          <div class="step-number">10</div>
+          <div class="step-title">交易完成与评价</div>
+          <span class="status-indicator status-pending" id="status10">等待中</span>
+        </div>
+        <div class="step-desc">订单完成，双方互评，数据归档，建立信用记录</div>
+        <button class="btn btn-outline" onclick="startStep(10)" disabled>等待支付完成</button>
+      </div>
+    </div>
+  </div>
+  
+  <div style="margin-top: 30px; text-align: center;">
+    <button class="btn btn-primary" onclick="startFullFlow()">开始完整业务流程演示</button>
+    <button class="btn btn-outline" onclick="resetFlow()">重置流程</button>
+    <button class="btn btn-outline" onclick="exportData()">导出数据</button>
+  </div>
+</div>
+
+<script>
+// 业务流状态
+let currentStep = 0;
+const totalSteps = 10;
+const stepData = {
+  1: { completed: false, role: 'buyer', title: '发布需求' },
+  2: { completed: false, role: 'buyer', title: '智能匹配' },
+  3: { completed: false, role: 'supplier', title: '接收商机' },
+  4: { completed: false, role: 'supplier', title: '提交报价' },
+  5: { completed: false, role: 'buyer', title: '比价分析' },
+  6: { completed: false, role: 'both', title: '样品确认' },
+  7: { completed: false, role: 'operation', title: '平台干预' },
+  8: { completed: false, role: 'both', title: '合同签订' },
+  9: { completed: false, role: 'both', title: '支付结算' },
+  10: { completed: false, role: 'both', title: '交易完成' }
+};
+
+// 显示提示
+function showToast(message, type = 'info') {
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  
+  setTimeout(() => toast.classList.add('show'), 10);
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+}
+
+// 更新进度条
+function updateProgress() {
+  const completedSteps = Object.values(stepData).filter(step => step.completed).length;
+  const progress = (completedSteps / totalSteps) * 100;
+  document.getElementById('progressFill').style.width = `${progress}%`;
+  
+  // 更新统计
+  updateStats();
+}
+
+// 更新统计
+function updateStats() {
+  const completedSteps = Object.values(stepData).filter(step => step.completed).length;
+  
+  // 采购商统计
+  document.getElementById('statPublished').textContent = stepData[1].completed ? 0 : 1;
+  document.getElementById('statMatching').textContent = stepData[2].completed ? 0 : (stepData[1].completed ? 1 : 0);
+  document.getElementById('statQuoted').textContent = stepData[4].completed ? 1 : 0;
+  document.getElementById('statCompared').textContent = stepData[5].completed ? 1 : 0;
+  
+  // 供应商统计
+  document.getElementById('statPendingQuotes').textContent = stepData[3].completed && !stepData[4].completed ? 1 : 0;
+  document.getElementById('statActiveQuotes').textContent = stepData[4].completed && !stepData[8].completed ? 1 : 0;
+  document.getElementById('statRevenue').textContent = stepData[9].completed ? '¥8,500' : '¥0';
+  document.getElementById('statRating').textContent = stepData[10].completed ? '4.8' : '4.5';
+  
+  // 运营统计
+  document.getElementById('statDailyOpp').textContent = stepData[1].completed ? '1' : '0';
+  document.getElementById('statActiveSuppliers').textContent = stepData[4].completed ? '1' : '0';
+  document.getElementById('statDailyRevenue').textContent = stepData[9].completed ? '¥8,500' : '¥0';
+  document.getElementById('statMatchRate').textContent = stepData[7].completed ? '100%' : '95%';
+}
+
+// 更新步骤状态
+function updateStepStatus(stepNumber, status) {
+  const stepEl = document.getElementById(`step${stepNumber}`);
+  const statusEl = document.getElementById(`status${stepNumber}`);
+  
+  if (!stepEl || !statusEl) return;
+  
+  const statusMap = {
+    'pending': { text: '待开始', className: 'status-pending' },
+    'processing': { text: '进行中', className: 'status-processing' },
+    'completed': { text: '已完成', className: 'status-completed' },
+    'failed': { text: '失败', className: 'status-failed' }
+  };
+  
+  const statusInfo = statusMap[status];
+  statusEl.textContent = statusInfo.text;
+  statusEl.className = `status-indicator ${statusInfo.className}`;
+  
+  // 更新按钮状态
+  const button = stepEl.querySelector('button');
+  if (button) {
+    if (status === 'completed') {
+      button.disabled = true;
+      button.textContent = '已完成';
+      button.className = 'btn btn-success';
+    } else if (status === 'processing') {
+      button.disabled = true;
+      button.textContent = '处理中...';
+    }
+  }
+}
+
+// 开始步骤
+function startStep(stepNumber) {
+  if (stepNumber !== currentStep + 1) {
+    showToast(`请先完成第${currentStep}步`, 'warning');
+    return;
+  }
+  
+  currentStep = stepNumber;
+  stepData[stepNumber].completed = false;
+  updateStepStatus(stepNumber, 'processing');
+  
+  // 模拟处理时间
+  setTimeout(() => {
+    stepData[stepNumber].completed = true;
+    updateStepStatus(stepNumber, 'completed');
+    updateProgress();
+    
+    // 启用下一步
+    if (stepNumber < totalSteps) {
+      const nextStep = stepNumber + 1;
+      const nextButton = document.getElementById(`step${nextStep}`)?.querySelector('button');
+      if (nextButton) {
+        nextButton.disabled = false;
+        nextButton.textContent = '开始' + stepData[nextStep].title;
+        nextButton.className = 'btn btn-primary';
+      }
+    }
+    
+    // 显示提示
+    const messages = {
+      1: '需求发布成功！系统开始匹配供应商...',
+      2: '智能匹配完成！已找到3家优质供应商',
+      3: '供应商已收到商机通知，准备报价',
+      4: '报价提交成功！等待采购商比价',
+      5: '比价分析完成，准备申请样品',
+      6: '样品确认通过，质量符合要求',
+      7: '平台干预成功，人工撮合完成',
+      8: '电子合同签订成功',
+      9: '支付结算完成，供应商已收到款项',
+      10: '交易完成！双方已互评，信用记录已建立'
+    };
+    
+    showToast(messages[stepNumber], 'success');
+    
+    // 自动切换到相关角色
+    const role = stepData[stepNumber].role;
+    if (role === 'supplier' && stepNumber >= 3 && stepNumber <= 6) {
+      switchRole('supplier');
+    } else if (role === 'operation' && stepNumber === 7) {
+      switchRole('operation');
+    }
+    
+  }, 1500);
+}
+
+// 切换角色
+function switchRole(role) {
+  // 更新标签
+  document.querySelectorAll('.role-tab').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  document.querySelector(`.role-tab[onclick*="${role}"]`).classList.add('active');
+  
+  // 显示对应面板
+  document.getElementById('buyerPanel').style.display = role === 'buyer' ? 'block' : 'none';
+  document.getElementById('supplierPanel').style.display = role === 'supplier' ? 'block' : 'none';
+  document.getElementById('operationPanel').style.display = role === 'operation' ? 'block' : 'none';
+}
+
+// 开始完整流程
+function startFullFlow() {
+  resetFlow();
+  showToast('开始完整业务流程演示，请按顺序执行各步骤', 'info');
+  startStep(1);
+}
+
+// 重置流程
+function resetFlow() {
+  currentStep = 0;
+  
+  // 重置所有步骤状态
+  for (let i = 1; i <= totalSteps; i++) {
+    stepData[i].completed = false;
+    updateStepStatus(i, 'pending');
+    
+    const button = document.getElementById(`step${i}`)?.querySelector('button');
+    if (button) {
+      button.disabled = i !== 1;
+      button.textContent = i === 1 ? '开始发布需求' : `等待${stepData[i-1]?.title || '上一步'}`;
+      button.className = i === 1 ? 'btn btn-primary' : 'btn btn-outline';
+    }
+  }
+  
+  updateProgress();
+  switchRole('buyer');
+  showToast('流程已重置', 'info');
+}
+
+// 导出数据
+function exportData() {
+  const data = {
+    timestamp: new Date().toISOString(),
+    currentStep,
+    completedSteps: Object.values(stepData).filter(step => step.completed).length,
+    steps: stepData
+  };
+  
+  const dataStr = JSON.stringify(data, null, 2);
+  const blob = new Blob([dataStr], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `b2b-flow-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  
+  URL.revokeObjectURL(url);
+  showToast('数据已导出', 'success');
+}
+
+// 初始化
+document.addEventListener('DOMContentLoaded', function() {
+  resetFlow();
+  showToast('大集商机平台业务流演示系统已就绪', 'info');
+});
+</script>
+</body>
+</html>
