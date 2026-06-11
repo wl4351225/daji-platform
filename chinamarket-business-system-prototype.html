@@ -83,6 +83,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC'
 .tag-green { background: #f6ffed; color: #52c41a; border: 1px solid #b7eb8f; }
 .tag-blue { background: #e6f7ff; color: #1890ff; border: 1px solid #91d5ff; }
 .tag-orange { background: #fff7e6; color: #fa8c16; border: 1px solid #ffd591; }
+.tag-dark { background: #f5f5f5; color: #595959; border: 1px solid #d9d9d9; }
 
 /* Stars */
 .stars { color: #faad14; font-size: 13px; }
@@ -1376,7 +1377,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC'
               <td><span class="tag tag-red">匹配失败</span></td>
               <td>48小时</td>
               <td>临沂不锈钢厂 (匹配度91%)</td>
-              <td><button class="btn btn-primary btn-sm btn-intervene">人工推荐</button></td>
+              <td><button class="btn btn-primary btn-sm" onclick="showManualRecommend('OPP-20240609001', '上海餐饮集团', '日用百货 / 餐具')">人工推荐</button></td>
             </tr>
             <tr>
               <td><code>OPP-20240608002</code></td>
@@ -1395,6 +1396,134 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC'
               <td>24小时</td>
               <td>山东包装厂 (匹配度87%)</td>
               <td><button class="btn btn-outline btn-sm">联系双方</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 全部商机列表 -->
+    <div class="card">
+      <div class="card-header">
+        全部商机列表
+        <div class="filter-group">
+          <input type="text" class="form-input-sm" placeholder="搜索商机或采购商">
+          <select class="form-select-sm">
+            <option>全部状态</option>
+            <option>报价中</option>
+            <option>样品中</option>
+            <option>报价结束</option>
+            <option>交易完成</option>
+          </select>
+        </div>
+      </div>
+      <div class="card-body">
+        <table class="table">
+          <thead>
+            <tr><th>商机ID</th><th>采购商</th><th>品类</th><th>商机标题</th><th>预算</th><th>截止日期</th><th>状态</th><th>操作</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>OPP-20240608001</code></td>
+              <td>上海餐饮集团</td>
+              <td>日用百货 / 餐具</td>
+              <td><strong>2024年不锈餐具年度采购</strong></td>
+              <td>¥150,000</td>
+              <td>2024-07-31</td>
+              <td><span class="tag tag-blue">报价中</span></td>
+              <td>
+                <button class="btn btn-outline btn-sm" onclick="showOpportunityDetail('OPP-ALL-001')">查看详情</button>
+                <button class="btn btn-primary btn-sm" onclick="recommendOpportunity('OPP-ALL-001')" style="margin-left:4px;">推荐商机</button>
+              </td>
+            </tr>
+            <tr>
+              <td><code>OPP-20240520002</code></td>
+              <td>广东机械厂</td>
+              <td>五金机电 / 工具</td>
+              <td><strong>精密数控机床配件采购</strong></td>
+              <td>¥520,000</td>
+              <td>2024-08-15</td>
+              <td><span class="tag tag-blue">报价中</span></td>
+              <td>
+                <button class="btn btn-outline btn-sm" onclick="showOpportunityDetail('OPP-ALL-002')">查看详情</button>
+                <button class="btn btn-primary btn-sm" onclick="recommendOpportunity('OPP-ALL-002')" style="margin-left:4px;">推荐商机</button>
+              </td>
+            </tr>
+            <tr>
+              <td><code>OPP-20240610003</code></td>
+              <td>北京食品公司</td>
+              <td>辅料包装 / 袋类</td>
+              <td><strong>食品级PE包装袋需求</strong></td>
+              <td>¥80,000</td>
+              <td>2024-08-30</td>
+              <td><span class="tag tag-orange">样品中</span></td>
+              <td>
+                <button class="btn btn-outline btn-sm" onclick="showOpportunityDetail('OPP-ALL-003')">查看详情</button>
+                <button class="btn btn-primary btn-sm" onclick="recommendOpportunity('OPP-ALL-003')" style="margin-left:4px;">推荐商机</button>
+              </td>
+            </tr>
+            <tr>
+              <td><code>OPP-20240515004</code></td>
+              <td>杭州服饰公司</td>
+              <td>纺织面料 / 辅料</td>
+              <td><strong>春季工作服套装采购</strong></td>
+              <td>¥65,000</td>
+              <td>2024-08-15</td>
+              <td><span class="tag tag-orange">样品中</span></td>
+              <td>
+                <button class="btn btn-outline btn-sm" onclick="showOpportunityDetail('OPP-ALL-004')">查看详情</button>
+                <button class="btn btn-primary btn-sm" onclick="recommendOpportunity('OPP-ALL-004')" style="margin-left:4px;">推荐商机</button>
+              </td>
+            </tr>
+            <tr>
+              <td><code>OPP-20240501005</code></td>
+              <td>广东电子厂</td>
+              <td>电子元器件 / 配件</td>
+              <td><strong>电子元件配套采购</strong></td>
+              <td>¥320,000</td>
+              <td>2024-07-20</td>
+              <td><span class="tag tag-green">报价结束</span></td>
+              <td>
+                <button class="btn btn-outline btn-sm" onclick="showOpportunityDetail('OPP-ALL-005')">查看详情</button>
+                <button class="btn btn-primary btn-sm" onclick="recommendOpportunity('OPP-ALL-005')" style="margin-left:4px;">推荐商机</button>
+              </td>
+            </tr>
+            <tr>
+              <td><code>OPP-20240420006</code></td>
+              <td>青岛餐饮连锁</td>
+              <td>食品生鲜 / 调味品</td>
+              <td><strong>进口调味料采购需求</strong></td>
+              <td>¥200,000</td>
+              <td>2024-06-30</td>
+              <td><span class="tag tag-green">报价结束</span></td>
+              <td>
+                <button class="btn btn-outline btn-sm" onclick="showOpportunityDetail('OPP-ALL-006')">查看详情</button>
+                <button class="btn btn-primary btn-sm" onclick="recommendOpportunity('OPP-ALL-006')" style="margin-left:4px;">推荐商机</button>
+              </td>
+            </tr>
+            <tr>
+              <td><code>OPP-20240315007</code></td>
+              <td>深圳华强电子</td>
+              <td>电子元器件 / 配件</td>
+              <td><strong>LED芯片采购需求</strong></td>
+              <td>¥850,000</td>
+              <td>2024-05-31</td>
+              <td><span class="tag tag-dark">交易完成</span></td>
+              <td>
+                <button class="btn btn-outline btn-sm" onclick="showOpportunityDetail('OPP-ALL-007')">查看详情</button>
+              </td>
+            </tr>
+            <tr>
+              <td><code>OPP-20240301008</code></td>
+              <td>苏州纺织贸易</td>
+              <td>纺织面料 / 面料</td>
+              <td><strong>棉麻混纺面料采购</strong></td>
+              <td>¥180,000</td>
+              <td>2024-05-15</td>
+              <td><span class="tag tag-dark">交易完成</span></td>
+              <td>
+                <button class="btn btn-outline btn-sm" onclick="showOpportunityDetail('OPP-ALL-008')">查看详情</button>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -1500,16 +1629,17 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC'
             <option>手动录入</option>
             <option>API同步</option>
           </select>
-          <button class="btn btn-primary btn-sm" onclick="showBatchAudit()">批量审核</button>
+          <button class="btn btn-primary btn-sm" onclick="batchAuditSelected()">批量审核</button>
         </div>
       </div>
       <div class="card-body">
         <table class="table">
           <thead>
-            <tr><th>商机标题</th><th>品类</th><th>采购商</th><th>预算</th><th>来源</th><th>导入时间</th><th>状态</th><th>操作</th></tr>
+            <tr><th style="width:40px;"><input type="checkbox" id="select-all-audit" onclick="toggleSelectAllAudit(this)"></th><th>商机标题</th><th>品类</th><th>采购商</th><th>预算</th><th>来源</th><th>导入时间</th><th>状态</th><th>操作</th></tr>
           </thead>
           <tbody>
             <tr>
+              <td><input type="checkbox" class="audit-checkbox" data-id="OPP-IM-001"></td>
               <td><strong>2024年不锈餐具年度采购</strong></td>
               <td>日用百货 / 餐具</td>
               <td>上海餐饮集团</td>
@@ -1519,10 +1649,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC'
               <td><span class="tag tag-blue">待审核</span></td>
               <td>
                 <button class="btn btn-primary btn-sm" onclick="auditImport('OPP-IM-001')">审核</button>
-                <button class="btn btn-outline btn-sm">详情</button>
+                <button class="btn btn-outline btn-sm" onclick="showOpportunityDetail('OPP-IM-001')">详情</button>
               </td>
             </tr>
             <tr>
+              <td><input type="checkbox" class="audit-checkbox" data-id="OPP-IM-002"></td>
               <td><strong>食品级PE包装袋需求</strong></td>
               <td>辅料包装 / 袋类</td>
               <td>北京食品公司</td>
@@ -1532,10 +1663,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC'
               <td><span class="tag tag-blue">待审核</span></td>
               <td>
                 <button class="btn btn-primary btn-sm" onclick="auditImport('OPP-IM-002')">审核</button>
-                <button class="btn btn-outline btn-sm">详情</button>
+                <button class="btn btn-outline btn-sm" onclick="showOpportunityDetail('OPP-IM-002')">详情</button>
               </td>
             </tr>
             <tr>
+              <td><input type="checkbox" class="audit-checkbox" data-id="OPP-IM-003"></td>
               <td><strong>电子元件配套采购</strong></td>
               <td>电子元器件 / 配件</td>
               <td>广东电子厂</td>
@@ -1545,10 +1677,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC'
               <td><span class="tag tag-blue">待审核</span></td>
               <td>
                 <button class="btn btn-primary btn-sm" onclick="auditImport('OPP-IM-003')">审核</button>
-                <button class="btn btn-outline btn-sm">详情</button>
+                <button class="btn btn-outline btn-sm" onclick="showOpportunityDetail('OPP-IM-003')">详情</button>
               </td>
             </tr>
             <tr>
+              <td><input type="checkbox" class="audit-checkbox" data-id="OPP-IM-004"></td>
               <td><strong>春季工作服套装采购</strong></td>
               <td>纺织面料 / 辅料</td>
               <td>杭州服饰公司</td>
@@ -1558,10 +1691,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC'
               <td><span class="tag tag-blue">待审核</span></td>
               <td>
                 <button class="btn btn-primary btn-sm" onclick="auditImport('OPP-IM-004')">审核</button>
-                <button class="btn btn-outline btn-sm">详情</button>
+                <button class="btn btn-outline btn-sm" onclick="showOpportunityDetail('OPP-IM-004')">详情</button>
               </td>
             </tr>
             <tr>
+              <td></td>
               <td><strong>进口调味料采购需求</strong></td>
               <td>食品生鲜 / 调味品</td>
               <td>青岛餐饮连锁</td>
@@ -1570,7 +1704,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC'
               <td>前天 11:10</td>
               <td><span class="tag tag-orange">审核通过</span></td>
               <td>
-                <button class="btn btn-outline btn-sm">详情</button>
+                <button class="btn btn-outline btn-sm" onclick="showOpportunityDetail('OPP-IM-005')">详情</button>
                 <button class="btn btn-primary btn-sm" onclick="recommendOpportunity('OPP-IM-005')" style="margin-left:4px;">推荐商机</button>
               </td>
             </tr>
@@ -3339,7 +3473,7 @@ function bindButtonEvents() {
   
   // 其余按钮：根据文本自动匹配弹窗
   document.querySelectorAll('.btn:not(.btn-publish):not(.btn-compare):not(.btn-quote):not(.btn-intervene):not(.btn-sample)').forEach(btn => {
-    if (btn.hasAttribute('data-page') || btn.closest('.modal-content')) return;
+    if (btn.hasAttribute('data-page') || btn.closest('.modal-content') || btn.hasAttribute('onclick')) return;
     
     const text = btn.textContent.trim();
     const modalFn = BTN_ACTIONS[text];
@@ -3469,18 +3603,25 @@ document.addEventListener('DOMContentLoaded', function() {
       rows.forEach(row => {
         const auditBtn = row.querySelector('button[onclick^="auditImport(\'' + id + '\')"]');
         if (auditBtn) {
-          const statusCell = row.querySelector('td:nth-child(7)');
+          const statusCell = row.querySelector('td:nth-child(8)');
           if (statusCell) {
             statusCell.innerHTML = '<span class="tag tag-orange">审核通过</span>';
           }
           
           // 替换操作列按钮
-          const actionCell = row.querySelector('td:nth-child(8)');
+          const actionCell = row.querySelector('td:nth-child(9)');
           if (actionCell) {
             actionCell.innerHTML = `
-              <button class="btn btn-outline btn-sm">详情</button>
+              <button class="btn btn-outline btn-sm" onclick="showOpportunityDetail('${id}')">详情</button>
               <button class="btn btn-primary btn-sm" onclick="recommendOpportunity('${id}')" style="margin-left:4px;">推荐商机</button>
             `;
+          }
+          
+          // 隐藏复选框
+          const checkbox = row.querySelector('.audit-checkbox');
+          if (checkbox) {
+            checkbox.checked = false;
+            checkbox.style.display = 'none';
           }
         }
       });
@@ -3505,7 +3646,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const r = records[id] || records['OPP-IM-001'];
     const div = document.createElement('div');
     div.className = 'modal-overlay';
-    div.innerHTML = `<div class="modal" style="max-width:560px">
+    div.innerHTML = `<div class="modal-content" style="max-width:560px">
       <div class="modal-header"><span>商机审核 - ${id}</span><span class="modal-close">&times;</span></div>
       <div class="modal-body">
         <div class="info-row"><span class="info-label">商机标题</span><span class="info-value">${r.title}</span></div>
@@ -3525,32 +3666,137 @@ document.addEventListener('DOMContentLoaded', function() {
     return div;
   }
 
-  // 批量审核
-  function showBatchAudit() {
-    showFormModal('批量审核', [
-      { label: '选择商机', type: 'checkbox', options: [
-        'OPP-IM-001 2024年不锈餐具年度采购',
-        'OPP-IM-002 食品级PE包装袋需求',
-        'OPP-IM-003 电子元件配套采购',
-        'OPP-IM-004 春季工作服套装采购'
-      ]},
-      { label: '审核结果', type: 'radio', options: ['全部通过', '全部驳回'] }
-    ]);
-    // 简化：直接更新
-    setTimeout(function() {
-      const modals = document.querySelectorAll('.modal-overlay');
-      modals.forEach(m => m.remove());
-      updatePendingCount(-4);
-      showToast('批量审核完成：4条通过，0条驳回');
-    }, 500);
+  // 全选/取消全选
+  function toggleSelectAllAudit(checkbox) {
+    document.querySelectorAll('.audit-checkbox').forEach(cb => {
+      cb.checked = checkbox.checked;
+    });
   }
-  window.showBatchAudit = showBatchAudit;
+  window.toggleSelectAllAudit = toggleSelectAllAudit;
+
+  // 批量审核选中的商机
+  function batchAuditSelected() {
+    const checked = document.querySelectorAll('.audit-checkbox:checked');
+    if (checked.length === 0) {
+      showToast('请先勾选需要审核的商机', 'warning');
+      return;
+    }
+    const ids = Array.from(checked).map(cb => cb.dataset.id);
+    const names = Array.from(checked).map(cb => {
+      const row = cb.closest('tr');
+      return row.querySelector('strong').textContent;
+    });
+    
+    // 显示审核结果选择弹窗
+    const div = document.createElement('div');
+    div.className = 'modal-overlay';
+    div.innerHTML = `<div class="modal-content" style="max-width:500px">
+      <div class="modal-header"><span>批量审核</span><span class="modal-close">&times;</span></div>
+      <div class="modal-body">
+        <p style="font-size:14px;color:#666;margin-bottom:12px;">已选择 <strong>${ids.length}</strong> 条商机：</p>
+        <div style="background:#f8f9fa;border-radius:6px;padding:12px;margin-bottom:16px;max-height:150px;overflow-y:auto;">
+          ${names.map(n => `<div style="font-size:13px;padding:4px 0;border-bottom:1px solid #eee;">${n}</div>`).join('')}
+        </div>
+        <div style="margin-bottom:16px;">
+          <label style="font-size:14px;color:#666;display:block;margin-bottom:8px;">审核结果</label>
+          <div style="display:flex;gap:12px;">
+            <label style="cursor:pointer;"><input type="radio" name="batch-audit-result" value="approve" checked> 全部通过</label>
+            <label style="cursor:pointer;"><input type="radio" name="batch-audit-result" value="reject"> 全部驳回</label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="batch-audit-cancel">取消</button>
+        <button class="btn btn-primary" id="batch-audit-confirm">确认</button>
+      </div>
+    </div>`;
+    document.body.appendChild(div);
+    div.style.display = 'flex';
+
+    div.querySelector('.modal-close').onclick = function() { div.remove(); };
+    div.addEventListener('click', function(e) { if (e.target === div) div.remove(); });
+    document.getElementById('batch-audit-cancel').onclick = function() { div.remove(); };
+    document.getElementById('batch-audit-confirm').onclick = function() {
+      div.remove();
+      const result = div.querySelector('input[name="batch-audit-result"]:checked').value;
+      // 更新状态标签
+      checked.forEach(cb => {
+        const row = cb.closest('tr');
+        const statusCell = row.querySelector('td .tag');
+        const actionCell = row.querySelector('td:last-child');
+        if (result === 'approve') {
+          statusCell.className = 'tag tag-orange';
+          statusCell.textContent = '审核通过';
+          actionCell.innerHTML = `<button class="btn btn-outline btn-sm" onclick="showOpportunityDetail('${cb.dataset.id}')">详情</button> <button class="btn btn-primary btn-sm" onclick="recommendOpportunity('${cb.dataset.id}')" style="margin-left:4px;">推荐商机</button>`;
+          cb.checked = false;
+          cb.style.display = 'none';
+        } else {
+          statusCell.className = 'tag tag-red';
+          statusCell.textContent = '已驳回';
+          actionCell.innerHTML = `<button class="btn btn-outline btn-sm" onclick="showOpportunityDetail('${cb.dataset.id}')">详情</button>`;
+          cb.checked = false;
+          cb.style.display = 'none';
+        }
+      });
+      updatePendingCount(-ids.length);
+      const actionText = result === 'approve' ? '通过' : '驳回';
+      showToast(`批量审核完成：${ids.length}条${actionText}`);
+    };
+  }
+  window.batchAuditSelected = batchAuditSelected;
+
+  // 商机详情弹窗（只读）
+  function showOpportunityDetail(id) {
+    const records = {
+      'OPP-IM-001': { title: '2024年不锈餐具年度采购', cat: '日用百货 / 餐具', buyer: '上海餐饮集团', budget: '¥150,000', qty: '5,000套', deadline: '2024-07-31', source: 'Excel', time: '2024-06-11 10:30', desc: '采购不锈钢餐具套装，含刀叉勺等，需符合食品级标准，要求提供样品及质检报告。' },
+      'OPP-IM-002': { title: '食品级PE包装袋需求', cat: '辅料包装 / 袋类', buyer: '北京食品公司', budget: '¥80,000', qty: '100,000个', deadline: '2024-08-30', source: '手动', time: '2024-06-11 09:15', desc: '需食品级PE材质包装袋，厚度0.08mm以上，支持定制印刷，分批交货。' },
+      'OPP-IM-003': { title: '电子元件配套采购', cat: '电子元器件 / 配件', buyer: '广东电子厂', budget: '¥320,000', qty: '10,000件', deadline: '2024-09-15', source: 'API', time: '2024-06-10 16:45', desc: '采购PCB板、连接器、电容电阻等电子元器件，要求符合RoHS标准，提供规格书。' },
+      'OPP-IM-004': { title: '春季工作服套装采购', cat: '纺织面料 / 辅料', buyer: '杭州服饰公司', budget: '¥65,000', qty: '2,000套', deadline: '2024-08-15', source: 'Excel', time: '2024-06-10 14:20', desc: '定制春季工作服套装，含上衣和裤子，面料要求透气耐磨，需提供色卡和面料样本。' },
+      'OPP-IM-005': { title: '进口调味料采购需求', cat: '食品生鲜 / 调味品', buyer: '青岛餐饮连锁', budget: '¥200,000', qty: '5吨', deadline: '2024-10-01', source: 'API', time: '2024-06-09 11:10', desc: '采购东南亚进口调味料，含咖喱粉、椰浆、鱼露等，要求原产地证明及进口检验检疫证明。' },
+      'OPP-ALL-001': { title: '2024年不锈餐具年度采购', cat: '日用百货 / 餐具', buyer: '上海餐饮集团', budget: '¥150,000', qty: '5,000套', deadline: '2024-07-31', source: '采购商发布', time: '2024-06-08 14:30', desc: '采购不锈钢餐具套装，含刀叉勺等，需符合食品级标准，要求提供样品及质检报告。目前已有3家供应商报价。' },
+      'OPP-ALL-002': { title: '精密数控机床配件采购', cat: '五金机电 / 工具', buyer: '广东机械厂', budget: '¥520,000', qty: '500套', deadline: '2024-08-15', source: '采购商发布', time: '2024-05-20 09:00', desc: '采购高精度数控机床主轴、导轨等核心配件，要求精度0.01mm以内，需提供技术参数及3年质保。' },
+      'OPP-ALL-003': { title: '食品级PE包装袋需求', cat: '辅料包装 / 袋类', buyer: '北京食品公司', budget: '¥80,000', qty: '100,000个', deadline: '2024-08-30', source: '采购商发布', time: '2024-06-10 11:00', desc: '需食品级PE材质包装袋，厚度0.08mm以上，支持定制印刷，分批交货。已收到样品正在测试中。' },
+      'OPP-ALL-004': { title: '春季工作服套装采购', cat: '纺织面料 / 辅料', buyer: '杭州服饰公司', budget: '¥65,000', qty: '2,000套', deadline: '2024-08-15', source: '采购商发布', time: '2024-05-15 10:20', desc: '定制春季工作服套装，含上衣和裤子，面料要求透气耐磨，需提供色卡和面料样本。已寄出样品等待确认。' },
+      'OPP-ALL-005': { title: '电子元件配套采购', cat: '电子元器件 / 配件', buyer: '广东电子厂', budget: '¥320,000', qty: '10,000件', deadline: '2024-07-20', source: '采购商发布', time: '2024-05-01 15:30', desc: '采购PCB板、连接器、电容电阻等电子元器件，要求符合RoHS标准。报价已结束，正在评估比价。' },
+      'OPP-ALL-006': { title: '进口调味料采购需求', cat: '食品生鲜 / 调味品', buyer: '青岛餐饮连锁', budget: '¥200,000', qty: '5吨', deadline: '2024-06-30', source: '采购商发布', time: '2024-04-20 08:00', desc: '采购东南亚进口调味料，含咖喱粉、椰浆、鱼露等，要求原产地证明。报价阶段已结束，供应商筛选完毕。' },
+      'OPP-ALL-007': { title: 'LED芯片采购需求', cat: '电子元器件 / 配件', buyer: '深圳华强电子', budget: '¥850,000', qty: '50,000片', deadline: '2024-05-31', source: '采购商发布', time: '2024-03-15 13:00', desc: '采购高亮度LED芯片，波长450-470nm，要求供货稳定且提供测试报告。交易已完成，深圳电子配件公司中标。' },
+      'OPP-ALL-008': { title: '棉麻混纺面料采购', cat: '纺织面料 / 面料', buyer: '苏州纺织贸易', budget: '¥180,000', qty: '8,000米', deadline: '2024-05-15', source: '采购商发布', time: '2024-03-01 10:00', desc: '采购棉麻混纺面料，含棉60%以上，幅宽150cm，需提供色牢度及缩水率检测报告。交易已完成。' }
+    };
+    const r = records[id] || records['OPP-IM-001'];
+    const div = document.createElement('div');
+    div.className = 'modal-overlay';
+    div.innerHTML = `<div class="modal-content" style="max-width:560px">
+      <div class="modal-header"><span>商机详情 - ${id}</span><span class="modal-close">&times;</span></div>
+      <div class="modal-body">
+        <div class="info-row"><span class="info-label">商机标题</span><span class="info-value">${r.title}</span></div>
+        <div class="info-row"><span class="info-label">品类</span><span class="info-value"><span class="tag tag-blue">${r.cat}</span></span></div>
+        <div class="info-row"><span class="info-label">采购商</span><span class="info-value">${r.buyer}</span></div>
+        <div class="info-row"><span class="info-label">预算金额</span><span class="info-value">${r.budget}</span></div>
+        <div class="info-row"><span class="info-label">采购量</span><span class="info-value">${r.qty}</span></div>
+        <div class="info-row"><span class="info-label">截止日期</span><span class="info-value">${r.deadline}</span></div>
+        <div class="info-row"><span class="info-label">来源</span><span class="info-value"><span class="tag tag-blue">${r.source}</span></span></div>
+        <div class="info-row"><span class="info-label">导入时间</span><span class="info-value">${r.time}</span></div>
+        <div style="margin-top:16px;padding-top:12px;border-top:1px solid #f0f0f0;">
+          <label style="font-size:14px;color:#666;display:block;margin-bottom:8px;">需求描述</label>
+          <p style="font-size:14px;color:#333;line-height:1.6;">${r.desc}</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="this.closest('.modal-overlay').remove()">关闭</button>
+      </div>
+    </div>`;
+    document.body.appendChild(div);
+    div.style.display = 'flex';
+    div.querySelector('.modal-close').onclick = function() { div.remove(); };
+    div.addEventListener('click', function(e) { if (e.target === div) div.remove(); });
+  }
+  window.showOpportunityDetail = showOpportunityDetail;
 
   // 导入记录
   function showImportHistory() {
     const div = document.createElement('div');
     div.className = 'modal-overlay';
-    div.innerHTML = `<div class="modal" style="max-width:700px">
+    div.innerHTML = `<div class="modal-content" style="max-width:700px">
       <div class="modal-header"><span>导入记录</span><span class="modal-close">&times;</span></div>
       <div class="modal-body">
         <table class="table">
@@ -3619,17 +3865,26 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   window.addAttachments = addAttachments;
 
-  // 推荐商机弹窗
+  // 推荐商机（下拉多选+搜索 - 全部商机列表）
   function recommendOpportunity(id) {
+    if (typeof id !== 'string' || id.trim() === '') return;
     const records = {
       'OPP-IM-001': { title: '2024年不锈餐具年度采购', cat: '日用百货 / 餐具', buyer: '上海餐饮集团', budget: '¥150,000' },
       'OPP-IM-002': { title: '食品级PE包装袋需求', cat: '辅料包装 / 袋类', buyer: '北京食品公司', budget: '¥80,000' },
       'OPP-IM-003': { title: '电子元件配套采购', cat: '电子元器件 / 配件', buyer: '广东电子厂', budget: '¥320,000' },
       'OPP-IM-004': { title: '春季工作服套装采购', cat: '纺织面料 / 辅料', buyer: '杭州服饰公司', budget: '¥65,000' },
-      'OPP-IM-005': { title: '进口调味料采购需求', cat: '食品生鲜 / 调味品', buyer: '青岛餐饮连锁', budget: '¥200,000' }
+      'OPP-IM-005': { title: '进口调味料采购需求', cat: '食品生鲜 / 调味品', buyer: '青岛餐饮连锁', budget: '¥200,000' },
+      'OPP-ALL-001': { title: '2024年不锈餐具年度采购', cat: '日用百货 / 餐具', buyer: '上海餐饮集团', budget: '¥150,000' },
+      'OPP-ALL-002': { title: '精密数控机床配件采购', cat: '五金机电 / 工具', buyer: '广东机械厂', budget: '¥520,000' },
+      'OPP-ALL-003': { title: '食品级PE包装袋需求', cat: '辅料包装 / 袋类', buyer: '北京食品公司', budget: '¥80,000' },
+      'OPP-ALL-004': { title: '春季工作服套装采购', cat: '纺织面料 / 辅料', buyer: '杭州服饰公司', budget: '¥65,000' },
+      'OPP-ALL-005': { title: '电子元件配套采购', cat: '电子元器件 / 配件', buyer: '广东电子厂', budget: '¥320,000' },
+      'OPP-ALL-006': { title: '进口调味料采购需求', cat: '食品生鲜 / 调味品', buyer: '青岛餐饮连锁', budget: '¥200,000' },
+      'OPP-ALL-007': { title: 'LED芯片采购需求', cat: '电子元器件 / 配件', buyer: '深圳华强电子', budget: '¥850,000' },
+      'OPP-ALL-008': { title: '棉麻混纺面料采购', cat: '纺织面料 / 面料', buyer: '苏州纺织贸易', budget: '¥180,000' }
     };
     const r = records[id] || records['OPP-IM-001'];
-    const mainCat = r.cat.split(' / ')[0]; // 提取一级类目用于匹配
+    const mainCat = r.cat.split(' / ')[0];
 
     const suppliers = [
       { name: '临沂五金制品厂', cat: '日用百货 / 餐具' },
@@ -3644,11 +3899,14 @@ document.addEventListener('DOMContentLoaded', function() {
       { name: '四川食品加工集团', cat: '食品生鲜 / 调味品' }
     ];
 
-    // 所有品类
     const allCategories = ['日用百货', '辅料包装', '纺织面料', '电子元器件', '食品生鲜'];
     
-    // 按一级类目匹配（默认）
-    const matchedSuppliers = suppliers.filter(s => s.cat.split(' / ')[0] === mainCat);
+    function getFilteredSuppliers(cat) {
+      return suppliers.filter(s => s.cat.split(' / ')[0] === cat);
+    }
+
+    let filteredSuppliers = getFilteredSuppliers(mainCat);
+    let selectedSuppliers = new Map();
 
     const div = document.createElement('div');
     div.className = 'modal-overlay';
@@ -3660,18 +3918,25 @@ document.addEventListener('DOMContentLoaded', function() {
         <div class="info-row"><span class="info-label">采购商</span><span class="info-value">${r.buyer}</span></div>
         <div class="info-row"><span class="info-label">预算金额</span><span class="info-value">${r.budget}</span></div>
         <div style="margin-top:16px;">
-          <label style="font-size:14px;color:#666;display:block;margin-bottom:8px;">推荐供应商 <span id="supplier-count" style="font-size:12px;color:#999;">（共 ${matchedSuppliers.length} 家）</span></label>
-          <div style="display:flex;gap:12px;align-items:flex-start;">
-            <select class="form-select" id="recommend-category-select" style="width:160px;flex-shrink:0;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <label style="font-size:14px;color:#666;">推荐供应商 <span id="supplier-count" style="font-size:12px;color:#999;">（共 ${filteredSuppliers.length} 家，已选 <b>0</b> 家）</span></label>
+            <select class="form-select" id="recommend-category-select" style="width:140px;">
               ${allCategories.map(c => `<option value="${c}" ${c === mainCat ? 'selected' : ''}>${c}</option>`).join('')}
             </select>
-            <div style="position:relative;flex:1;">
-              <input type="text" class="form-input" id="recommend-supplier-search" placeholder="搜索供应商名称..." style="width:100%;" autocomplete="off">
-              <div id="recommend-supplier-dropdown" style="display:none;position:absolute;top:100%;left:0;right:0;z-index:100;background:#fff;border:1px solid #d9d9d9;border-top:none;border-radius:0 0 6px 6px;max-height:200px;overflow-y:auto;box-shadow:0 4px 12px rgba(0,0,0,0.1);">
-                ${matchedSuppliers.map((s, i) => `<div class="recommend-supplier-option" data-name="${s.name}" data-index="${i}" style="padding:10px 12px;cursor:pointer;border-bottom:1px solid #f5f5f5;font-size:13px;transition:background 0.15s;" onmouseover="this.style.background='#e6f7ff'" onmouseout="this.style.background=''">
-                  <strong>${s.name}</strong>
-                  <span style="color:#999;margin-left:8px;font-size:12px;">${s.cat}</span>
-                </div>`).join('')}
+          </div>
+          <div id="recommend-multi-select" style="position:relative;">
+            <div id="recommend-trigger" style="display:flex;flex-wrap:wrap;gap:4px;align-items:center;min-height:36px;padding:4px 8px;border:1px solid #d9d9d9;border-radius:4px;cursor:pointer;background:#fff;transition:border-color 0.2s;">
+              <span id="recommend-placeholder" style="color:#bfbfbf;font-size:13px;">请选择供应商</span>
+            </div>
+            <div id="recommend-dropdown" style="display:none;position:absolute;top:100%;left:0;right:0;z-index:100;background:#fff;border:1px solid #d9d9d9;border-top:none;border-radius:0 0 6px 6px;box-shadow:0 4px 12px rgba(0,0,0,0.1);margin-top:-1px;">
+              <div style="padding:8px;border-bottom:1px solid #f0f0f0;">
+                <input type="text" id="recommend-search-input" placeholder="搜索供应商名称..." style="width:100%;padding:6px 10px;border:1px solid #e8e8e8;border-radius:4px;font-size:12px;outline:none;" autocomplete="off">
+              </div>
+              <div id="recommend-option-list" style="max-height:200px;overflow-y:auto;">
+                ${filteredSuppliers.map(s => `<label class="recommend-opt" data-name="${s.name}" data-cat="${s.cat}" style="display:flex;align-items:center;gap:8px;padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid #fafafa;transition:background 0.15s;" onmouseover="this.style.background='#e6f7ff'" onmouseout="if(!this.classList.contains('checked')) this.style.background=''">
+                  <input type="checkbox" class="recommend-supplier-check" value="${s.name}" data-cat="${s.cat}">
+                  <span><strong>${s.name}</strong> <span style="color:#999;font-size:12px;">${s.cat}</span></span>
+                </label>`).join('')}
               </div>
             </div>
           </div>
@@ -3689,84 +3954,310 @@ document.addEventListener('DOMContentLoaded', function() {
     document.body.appendChild(div);
     div.style.display = 'flex';
 
-    let selectedSupplier = '';
-    let currentSupplierList = matchedSuppliers;
+    const trigger = div.querySelector('#recommend-trigger');
+    const dropdown = div.querySelector('#recommend-dropdown');
+    const searchInput = div.querySelector('#recommend-search-input');
+    const optionList = div.querySelector('#recommend-option-list');
+    const countSpan = div.querySelector('#supplier-count');
 
-    // 品类下拉切换
-    const categorySelect = div.querySelector('#recommend-category-select');
-    categorySelect.addEventListener('change', function() {
-      currentSupplierList = suppliers.filter(s => s.cat.split(' / ')[0] === this.value);
-      document.getElementById('supplier-count').textContent = `（共 ${currentSupplierList.length} 家）`;
+    function updateUI() {
+      const chips = Array.from(selectedSuppliers.entries()).map(([name, cat]) => 
+        `<span style="display:inline-flex;align-items:center;gap:4px;padding:2px 8px;background:#e6f7ff;border:1px solid #91d5ff;border-radius:3px;font-size:12px;color:#1890ff;">
+          ${name}
+          <span class="recommend-chip-remove" data-name="${name}" style="cursor:pointer;font-weight:bold;font-size:14px;line-height:1;">&times;</span>
+        </span>`
+      ).join('');
+      trigger.innerHTML = chips + (selectedSuppliers.size === 0 ? '<span id="recommend-placeholder" style="color:#bfbfbf;font-size:13px;">请选择供应商</span>' : '');
       
-      const dropdown = div.querySelector('#recommend-supplier-dropdown');
-      dropdown.innerHTML = currentSupplierList.map((s, i) => `<div class="recommend-supplier-option" data-name="${s.name}" data-index="${i}" style="padding:10px 12px;cursor:pointer;border-bottom:1px solid #f5f5f5;font-size:13px;transition:background 0.15s;" onmouseover="this.style.background='#e6f7ff'" onmouseout="this.style.background=''">
-        <strong>${s.name}</strong>
-        <span style="color:#999;margin-left:8px;font-size:12px;">${s.cat}</span>
-      </div>`).join('');
-      
-      dropdown.querySelectorAll('.recommend-supplier-option').forEach(opt => {
-        opt.addEventListener('click', function() {
-          selectedSupplier = this.dataset.name;
-          searchInput.value = selectedSupplier;
-          dropdown.style.display = 'none';
-        });
+      trigger.querySelectorAll('.recommend-chip-remove').forEach(span => {
+        span.onclick = function(e) {
+          e.stopPropagation();
+          const name = this.dataset.name;
+          selectedSuppliers.delete(name);
+          const cb = optionList.querySelector(`.recommend-supplier-check[value="${CSS.escape(name)}"]`);
+          if (cb) { cb.checked = false; cb.closest('.recommend-opt').classList.remove('checked'); }
+          updateUI();
+        };
       });
-      
-      searchInput.value = '';
-      dropdown.style.display = 'none';
-    });
 
-    // 搜索输入和下拉列表事件
-    const searchInput = div.querySelector('#recommend-supplier-search');
-    const dropdown = div.querySelector('#recommend-supplier-dropdown');
+      countSpan.innerHTML = `（共 ${filteredSuppliers.length} 家，已选 <b>${selectedSuppliers.size}</b> 家）`;
 
-    searchInput.addEventListener('focus', function() {
-      dropdown.style.display = 'block';
-    });
-
-    searchInput.addEventListener('input', function() {
-      const keyword = this.value.toLowerCase();
-      const options = dropdown.querySelectorAll('.recommend-supplier-option');
-      let hasVisible = false;
-      options.forEach(opt => {
-        const name = opt.dataset.name.toLowerCase();
-        if (name.includes(keyword)) {
-          opt.style.display = '';
-          hasVisible = true;
+      optionList.querySelectorAll('.recommend-opt').forEach(opt => {
+        const cb = opt.querySelector('.recommend-supplier-check');
+        if (selectedSuppliers.has(cb.value)) {
+          opt.classList.add('checked');
+          opt.style.background = '#e6f7ff';
         } else {
-          opt.style.display = 'none';
+          opt.classList.remove('checked');
+          opt.style.background = '';
         }
       });
-      dropdown.style.display = hasVisible ? 'block' : 'none';
-    });
+    }
 
-    dropdown.querySelectorAll('.recommend-supplier-option').forEach(opt => {
-      opt.addEventListener('click', function() {
-        selectedSupplier = this.dataset.name;
-        searchInput.value = selectedSupplier;
-        dropdown.style.display = 'none';
+    function renderOptions() {
+      const keyword = searchInput.value.toLowerCase();
+      optionList.querySelectorAll('.recommend-opt').forEach(opt => {
+        const name = opt.dataset.name.toLowerCase();
+        opt.style.display = name.includes(keyword) ? '' : 'none';
       });
+    }
+
+    trigger.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const isOpen = dropdown.style.display === 'block';
+      dropdown.style.display = isOpen ? 'none' : 'block';
+      if (!isOpen) {
+        trigger.style.borderColor = '#e60012';
+        trigger.style.boxShadow = '0 0 0 2px rgba(230,0,18,0.1)';
+      } else {
+        trigger.style.borderColor = '#d9d9d9';
+        trigger.style.boxShadow = 'none';
+      }
     });
 
-    document.addEventListener('click', function closeDropdown(e) {
+    searchInput.addEventListener('input', renderOptions);
+    searchInput.addEventListener('click', function(e) { e.stopPropagation(); });
+
+    optionList.addEventListener('change', function(e) {
+      if (e.target.classList.contains('recommend-supplier-check')) {
+        const name = e.target.value;
+        const cat = e.target.dataset.cat;
+        if (e.target.checked) {
+          selectedSuppliers.set(name, cat);
+        } else {
+          selectedSuppliers.delete(name);
+        }
+        updateUI();
+      }
+    });
+
+    div.querySelector('#recommend-category-select').addEventListener('change', function() {
+      filteredSuppliers = getFilteredSuppliers(this.value);
+      selectedSuppliers.clear();
+      optionList.innerHTML = filteredSuppliers.map(s => `<label class="recommend-opt" data-name="${s.name}" data-cat="${s.cat}" style="display:flex;align-items:center;gap:8px;padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid #fafafa;transition:background 0.15s;" onmouseover="this.style.background='#e6f7ff'" onmouseout="if(!this.classList.contains('checked')) this.style.background=''">
+        <input type="checkbox" class="recommend-supplier-check" value="${s.name}" data-cat="${s.cat}">
+        <span><strong>${s.name}</strong> <span style="color:#999;font-size:12px;">${s.cat}</span></span>
+      </label>`).join('');
+      searchInput.value = '';
+      updateUI();
+    });
+
+    document.addEventListener('click', function closeDD(e) {
       if (!div.contains(e.target)) {
         dropdown.style.display = 'none';
+        trigger.style.borderColor = '#d9d9d9';
+        trigger.style.boxShadow = 'none';
       }
     });
 
     div.querySelector('.modal-close').onclick = function() { div.remove(); };
     div.addEventListener('click', function(e) { if (e.target === div) div.remove(); });
-    document.getElementById('recommend-cancel').onclick = function() { div.remove(); };
-    document.getElementById('recommend-confirm').onclick = function() {
-      if (!selectedSupplier) {
-        alert('请选择推荐供应商');
+    div.querySelector('#recommend-cancel').onclick = function() { div.remove(); };
+    div.querySelector('#recommend-confirm').onclick = function() {
+      if (selectedSuppliers.size === 0) {
+        alert('请至少选择一个推荐供应商');
         return;
       }
       div.remove();
-      showToast('商机「' + r.title + '」已推荐给 ' + selectedSupplier);
+      const names = Array.from(selectedSuppliers.keys()).join('、');
+      showToast('商机「' + r.title + '」已推荐给 ' + names);
     };
   }
   window.recommendOpportunity = recommendOpportunity;
+
+  // 人工推荐（下拉多选+搜索 - 供需撮合干预）
+  function showManualRecommend(oppId, buyerName, category) {
+    const mainCat = category.split(' / ')[0];
+
+    const suppliers = [
+      { name: '临沂五金制品厂', cat: '日用百货 / 餐具' },
+      { name: '江苏不锈钢制品有限公司', cat: '日用百货 / 餐具' },
+      { name: '广东包装材料有限公司', cat: '辅料包装 / 袋类' },
+      { name: '河北塑料包装厂', cat: '辅料包装 / 袋类' },
+      { name: '浙江纺织品集团', cat: '纺织面料 / 辅料' },
+      { name: '上海纺织科技有限公司', cat: '纺织面料 / 服装辅料' },
+      { name: '深圳电子配件公司', cat: '电子元器件 / 配件' },
+      { name: '东莞电子制造有限公司', cat: '电子元器件 / 配件' },
+      { name: '山东食品供应链', cat: '食品生鲜 / 调味品' },
+      { name: '四川食品加工集团', cat: '食品生鲜 / 调味品' }
+    ];
+    
+    const allCategories = ['日用百货', '辅料包装', '纺织面料', '电子元器件', '食品生鲜'];
+
+    function getFilteredSuppliers(cat) {
+      return suppliers.filter(s => s.cat.split(' / ')[0] === cat);
+    }
+
+    let filteredSuppliers = getFilteredSuppliers(mainCat);
+    let selectedSuppliers = new Map(); // name -> cat
+
+    const div = document.createElement('div');
+    div.className = 'modal-overlay';
+    div.innerHTML = `<div class="modal-content" style="max-width:560px">
+      <div class="modal-header"><span>人工推荐 - ${oppId}</span><span class="modal-close">&times;</span></div>
+      <div class="modal-body">
+        <div class="info-row"><span class="info-label">商机ID</span><span class="info-value"><code>${oppId}</code></span></div>
+        <div class="info-row"><span class="info-label">采购商</span><span class="info-value">${buyerName}</span></div>
+        <div class="info-row"><span class="info-label">品类</span><span class="info-value"><span class="tag tag-blue">${category}</span></span></div>
+        <div style="margin-top:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <label style="font-size:14px;color:#666;">推荐供应商 <span id="manual-count" style="font-size:12px;color:#999;">（共 ${filteredSuppliers.length} 家，已选 <b>0</b> 家）</span></label>
+            <select class="form-select" id="manual-category-select" style="width:140px;">
+              ${allCategories.map(c => `<option value="${c}" ${c === mainCat ? 'selected' : ''}>${c}</option>`).join('')}
+            </select>
+          </div>
+          <div id="manual-multi-select" style="position:relative;">
+            <div id="manual-trigger" style="display:flex;flex-wrap:wrap;gap:4px;align-items:center;min-height:36px;padding:4px 8px;border:1px solid #d9d9d9;border-radius:4px;cursor:pointer;background:#fff;transition:border-color 0.2s;">
+              <span id="manual-placeholder" style="color:#bfbfbf;font-size:13px;">请选择供应商</span>
+            </div>
+            <div id="manual-dropdown" style="display:none;position:absolute;top:100%;left:0;right:0;z-index:100;background:#fff;border:1px solid #d9d9d9;border-top:none;border-radius:0 0 6px 6px;box-shadow:0 4px 12px rgba(0,0,0,0.1);margin-top:-1px;">
+              <div style="padding:8px;border-bottom:1px solid #f0f0f0;">
+                <input type="text" id="manual-search-input" placeholder="搜索供应商名称..." style="width:100%;padding:6px 10px;border:1px solid #e8e8e8;border-radius:4px;font-size:12px;outline:none;" autocomplete="off">
+              </div>
+              <div id="manual-option-list" style="max-height:200px;overflow-y:auto;">
+                ${filteredSuppliers.map(s => `<label class="manual-opt" data-name="${s.name}" data-cat="${s.cat}" style="display:flex;align-items:center;gap:8px;padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid #fafafa;transition:background 0.15s;" onmouseover="this.style.background='#e6f7ff'" onmouseout="if(!this.classList.contains('checked')) this.style.background=''">
+                  <input type="checkbox" class="manual-supplier-check" value="${s.name}" data-cat="${s.cat}">
+                  <span><strong>${s.name}</strong> <span style="color:#999;font-size:12px;">${s.cat}</span></span>
+                </label>`).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <label style="font-size:14px;color:#666;display:block;margin-bottom:8px;">推荐备注（选填）</label>
+          <textarea class="form-textarea" id="manual-remark" style="width:100%;height:60px;" placeholder="给供应商的推荐说明..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="manual-recommend-cancel">取消</button>
+        <button class="btn btn-primary" id="manual-recommend-confirm">确认推荐</button>
+      </div>
+    </div>`;
+    document.body.appendChild(div);
+    div.style.display = 'flex';
+
+    const trigger = div.querySelector('#manual-trigger');
+    const dropdown = div.querySelector('#manual-dropdown');
+    const placeholder = div.querySelector('#manual-placeholder');
+    const searchInput = div.querySelector('#manual-search-input');
+    const optionList = div.querySelector('#manual-option-list');
+    const countSpan = div.querySelector('#manual-count');
+
+    function updateUI() {
+      // 更新已选标签
+      const chips = Array.from(selectedSuppliers.entries()).map(([name, cat]) => 
+        `<span style="display:inline-flex;align-items:center;gap:4px;padding:2px 8px;background:#e6f7ff;border:1px solid #91d5ff;border-radius:3px;font-size:12px;color:#1890ff;">
+          ${name}
+          <span class="manual-chip-remove" data-name="${name}" style="cursor:pointer;font-weight:bold;font-size:14px;line-height:1;">&times;</span>
+        </span>`
+      ).join('');
+      trigger.innerHTML = chips + (selectedSuppliers.size === 0 ? '<span id="manual-placeholder" style="color:#bfbfbf;font-size:13px;">请选择供应商</span>' : '');
+      
+      // 移除事件
+      trigger.querySelectorAll('.manual-chip-remove').forEach(span => {
+        span.onclick = function(e) {
+          e.stopPropagation();
+          const name = this.dataset.name;
+          selectedSuppliers.delete(name);
+          const cb = optionList.querySelector(`.manual-supplier-check[value="${CSS.escape(name)}"]`);
+          if (cb) { cb.checked = false; cb.closest('.manual-opt').classList.remove('checked'); }
+          updateUI();
+        };
+      });
+
+      // 更新计数
+      countSpan.innerHTML = `（共 ${filteredSuppliers.length} 家，已选 <b>${selectedSuppliers.size}</b> 家）`;
+
+      // 高亮已选项
+      optionList.querySelectorAll('.manual-opt').forEach(opt => {
+        const cb = opt.querySelector('.manual-supplier-check');
+        if (selectedSuppliers.has(cb.value)) {
+          opt.classList.add('checked');
+          opt.style.background = '#e6f7ff';
+        } else {
+          opt.classList.remove('checked');
+          opt.style.background = '';
+        }
+      });
+    }
+
+    function renderOptions() {
+      const keyword = searchInput.value.toLowerCase();
+      optionList.querySelectorAll('.manual-opt').forEach(opt => {
+        const name = opt.dataset.name.toLowerCase();
+        opt.style.display = name.includes(keyword) ? '' : 'none';
+      });
+    }
+
+    // 触发下拉
+    trigger.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const isOpen = dropdown.style.display === 'block';
+      dropdown.style.display = isOpen ? 'none' : 'block';
+      if (!isOpen) {
+        trigger.style.borderColor = '#e60012';
+        trigger.style.boxShadow = '0 0 0 2px rgba(230,0,18,0.1)';
+      } else {
+        trigger.style.borderColor = '#d9d9d9';
+        trigger.style.boxShadow = 'none';
+      }
+    });
+
+    // 搜索过滤
+    searchInput.addEventListener('input', renderOptions);
+
+    // 搜索框阻止冒泡
+    searchInput.addEventListener('click', function(e) { e.stopPropagation(); });
+
+    // 选项勾选
+    optionList.addEventListener('change', function(e) {
+      if (e.target.classList.contains('manual-supplier-check')) {
+        const name = e.target.value;
+        const cat = e.target.dataset.cat;
+        if (e.target.checked) {
+          selectedSuppliers.set(name, cat);
+        } else {
+          selectedSuppliers.delete(name);
+        }
+        updateUI();
+      }
+    });
+
+    // 品类切换
+    div.querySelector('#manual-category-select').addEventListener('change', function() {
+      filteredSuppliers = getFilteredSuppliers(this.value);
+      selectedSuppliers.clear();
+      optionList.innerHTML = filteredSuppliers.map(s => `<label class="manual-opt" data-name="${s.name}" data-cat="${s.cat}" style="display:flex;align-items:center;gap:8px;padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid #fafafa;transition:background 0.15s;" onmouseover="this.style.background='#e6f7ff'" onmouseout="if(!this.classList.contains('checked')) this.style.background=''">
+        <input type="checkbox" class="manual-supplier-check" value="${s.name}" data-cat="${s.cat}">
+        <span><strong>${s.name}</strong> <span style="color:#999;font-size:12px;">${s.cat}</span></span>
+      </label>`).join('');
+      searchInput.value = '';
+      updateUI();
+    });
+
+    // 点击外部关闭下拉
+    document.addEventListener('click', function closeDD(e) {
+      if (!div.contains(e.target)) {
+        dropdown.style.display = 'none';
+        trigger.style.borderColor = '#d9d9d9';
+        trigger.style.boxShadow = 'none';
+      }
+    });
+
+    div.querySelector('.modal-close').onclick = function() { div.remove(); };
+    div.addEventListener('click', function(e) { if (e.target === div) div.remove(); });
+    div.querySelector('#manual-recommend-cancel').onclick = function() { div.remove(); };
+    div.querySelector('#manual-recommend-confirm').onclick = function() {
+      if (selectedSuppliers.size === 0) {
+        alert('请至少选择一个推荐供应商');
+        return;
+      }
+      div.remove();
+      const names = Array.from(selectedSuppliers.keys()).join('、');
+      showToast(`已向 ${names} 推荐商机「${buyerName}」`);
+    };
+  }
+  window.showManualRecommend = showManualRecommend;
 
   // 绑定按钮事件
   bindButtonEvents();
