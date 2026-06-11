@@ -313,6 +313,18 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC'
 /* Manual entry form inside card */
 .manual-entry-form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .manual-entry-form .full-width { grid-column: 1 / -1; }
+
+/* Attachment area */
+.attachment-section { margin-top: 16px; padding-top: 16px; border-top: 1px dashed #e8e8e8; }
+.attachment-section .section-label { font-size: 13px; color: #999; margin-bottom: 8px; }
+.attachment-section .section-label .optional { color: #bbb; font-weight: normal; }
+.attachment-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.attachment-file { display: flex; align-items: center; gap: 6px; padding: 6px 10px; background: #f6f8fa; border: 1px solid #e8e8e8; border-radius: 4px; font-size: 12px; }
+.attachment-file .file-icon { font-size: 16px; }
+.attachment-file .file-name { color: #333; max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.attachment-file .file-size { color: #999; }
+.attachment-file .file-remove { color: #e60012; cursor: pointer; margin-left: 4px; font-weight: bold; }
+.attachment-file .file-remove:hover { color: #ff4d4f; }
 </style>
 </head>
 <body>
@@ -1205,6 +1217,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC'
               <button class="btn btn-outline btn-sm" style="margin-left:8px" onclick="showFormModal('下载模板',[])">下载模板</button>
             </div>
           </div>
+          <div class="attachment-section">
+            <div class="section-label">产品图片/规格书 <span class="optional">（非必填，支持 JPG/PNG/PDF，最多5个文件）</span></div>
+            <button class="btn btn-outline btn-sm" onclick="addAttachments('excel')">上传文件</button>
+            <div class="attachment-list" id="attach-list-excel"></div>
+          </div>
           <div id="excel-preview" style="margin-top:16px;display:none">
             <div style="font-size:13px;color:#333;margin-bottom:8px">预览（共 <b id="excel-count">0</b> 条）</div>
             <table class="table">
@@ -1248,6 +1265,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC'
             <div class="full-width">
               <label class="form-label">详细描述</label>
               <textarea class="form-textarea" placeholder="描述采购需求、规格参数、交付要求等"></textarea>
+            </div>
+            <div class="full-width attachment-section" style="margin-top:0;padding-top:0;border-top:none">
+              <div class="section-label">产品图片/规格书 <span class="optional">（非必填，支持 JPG/PNG/PDF，最多5个文件）</span></div>
+              <button class="btn btn-outline btn-sm" onclick="addAttachments('manual')">上传文件</button>
+              <div class="attachment-list" id="attach-list-manual"></div>
             </div>
             <div class="full-width" style="text-align:right">
               <button class="btn btn-outline btn-sm" onclick="switchImportTab('excel', document.querySelector('.import-tab'))">取消</button>
@@ -2609,6 +2631,34 @@ document.addEventListener('DOMContentLoaded', function() {
     document.body.appendChild(toast);
     setTimeout(() => toast.remove(), 2600);
   }
+
+  // 附件上传（模拟）
+  function addAttachments(panelId) {
+    const list = document.getElementById('attach-list-' + panelId);
+    const current = list.querySelectorAll('.attachment-file').length;
+    const remaining = 5 - current;
+    if (remaining <= 0) { showToast('最多上传5个文件'); return; }
+
+    const mockFiles = [
+      { name: '产品实拍图.jpg', size: '2.3MB', icon: '&#128247;' },
+      { name: '规格参数表.pdf', size: '1.1MB', icon: '&#128196;' },
+      { name: '包装示意图.png', size: '856KB', icon: '&#128444;' },
+      { name: '质检报告.pdf', size: '3.2MB', icon: '&#128196;' },
+      { name: '样品细节图.jpg', size: '1.8MB', icon: '&#128247;' }
+    ];
+
+    const count = Math.min(remaining, Math.floor(Math.random() * 3) + 1);
+    for (let i = 0; i < count; i++) {
+      const idx = (current + i) % mockFiles.length;
+      const f = mockFiles[idx];
+      const item = document.createElement('span');
+      item.className = 'attachment-file';
+      item.innerHTML = `<span class="file-icon">${f.icon}</span><span class="file-name">${f.name}</span><span class="file-size">${f.size}</span><span class="file-remove" onclick="this.parentElement.remove()">&times;</span>`;
+      list.appendChild(item);
+    }
+    showToast('已添加 ' + count + ' 个附件');
+  }
+  window.addAttachments = addAttachments;
 
   // 绑定按钮事件
   bindButtonEvents();
