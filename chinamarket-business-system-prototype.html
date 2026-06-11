@@ -281,6 +281,38 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC'
 .info-row:last-child { border-bottom: none; }
 .info-label { flex: 0 0 100px; font-size: 13px; color: #999; }
 .info-value { flex: 1; font-size: 13px; color: #333; word-break: break-all; }
+
+/* Import card tabs */
+.import-tabs { display: flex; gap: 0; border-bottom: 2px solid #f0f0f0; margin-bottom: 16px; }
+.import-tab { padding: 10px 20px; font-size: 13px; font-weight: 500; color: #999; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; background: none; border-top: none; border-left: none; border-right: none; }
+.import-tab.active { color: #e60012; border-bottom-color: #e60012; }
+.import-tab:hover { color: #e60012; }
+.import-panel { display: none; }
+.import-panel.active { display: block; }
+
+/* Upload area */
+.upload-area { border: 2px dashed #d9d9d9; border-radius: 8px; padding: 40px 20px; text-align: center; background: #fafafa; transition: border-color 0.2s; }
+.upload-area:hover { border-color: #e60012; }
+.upload-area .upload-icon { font-size: 36px; color: #bbb; margin-bottom: 8px; }
+.upload-area .upload-text { font-size: 14px; color: #666; margin-bottom: 4px; }
+.upload-area .upload-hint { font-size: 12px; color: #999; }
+
+/* Import audit table */
+.import-source { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 11px; margin-right: 4px; }
+.import-source.excel { background: #e6f7ff; color: #1890ff; }
+.import-source.manual { background: #f6ffed; color: #52c41a; }
+.import-source.api { background: #fff7e6; color: #fa8c16; }
+
+/* API config form */
+.api-config-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #f5f5f5; }
+.api-config-row:last-child { border-bottom: none; }
+.api-config-row .api-label { flex: 0 0 100px; font-size: 13px; color: #666; }
+.api-config-row .api-value { flex: 1; }
+.api-config-row input[type="text"] { width: 100%; }
+
+/* Manual entry form inside card */
+.manual-entry-form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.manual-entry-form .full-width { grid-column: 1 / -1; }
 </style>
 </head>
 <body>
@@ -1040,6 +1072,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC'
         <div class="stat-label">供需匹配成功率</div>
         <div class="stat-sub">行业均值 86%</div>
       </div>
+      <div class="stat-card stat-card-large">
+        <div class="stat-num" id="stat-pending-import">12</div>
+        <div class="stat-label">待审核商机</div>
+        <div class="stat-sub">来源：外部导入</div>
+      </div>
     </div>
 
     <div class="card">
@@ -1135,6 +1172,204 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC'
               <td>李审核员</td>
               <td>
                 <button class="btn btn-outline btn-sm">发放入驻通知</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 外部商机导入 -->
+    <div class="card" id="import-card">
+      <div class="card-header">
+        外部商机导入
+        <div>
+          <button class="btn btn-outline btn-sm" onclick="showImportHistory()">导入记录</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="import-tabs">
+          <button class="import-tab active" onclick="switchImportTab('excel', this)">Excel批量导入</button>
+          <button class="import-tab" onclick="switchImportTab('manual', this)">手动录入</button>
+          <button class="import-tab" onclick="switchImportTab('api', this)">API配置</button>
+        </div>
+
+        <!-- Excel导入面板 -->
+        <div class="import-panel active" id="panel-excel">
+          <div class="upload-area">
+            <div class="upload-icon">&#128194;</div>
+            <div class="upload-text">拖拽Excel文件到此处，或点击选择文件</div>
+            <div class="upload-hint">支持 .xlsx / .xls 格式，单次最多500条</div>
+            <div style="margin-top:12px">
+              <button class="btn btn-primary btn-sm" onclick="simulateExcelUpload()">选择文件</button>
+              <button class="btn btn-outline btn-sm" style="margin-left:8px" onclick="showFormModal('下载模板',[])">下载模板</button>
+            </div>
+          </div>
+          <div id="excel-preview" style="margin-top:16px;display:none">
+            <div style="font-size:13px;color:#333;margin-bottom:8px">预览（共 <b id="excel-count">0</b> 条）</div>
+            <table class="table">
+              <thead><tr><th>商机标题</th><th>品类</th><th>采购量</th><th>截止日期</th><th>来源</th><th>状态</th></tr></thead>
+              <tbody id="excel-preview-body"></tbody>
+            </table>
+            <div style="margin-top:12px;text-align:right">
+              <button class="btn btn-outline btn-sm" onclick="cancelExcelImport()">取消</button>
+              <button class="btn btn-primary btn-sm" style="margin-left:8px" onclick="submitExcelImport()">提交审核</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 手动录入面板 -->
+        <div class="import-panel" id="panel-manual">
+          <div class="manual-entry-form">
+            <div>
+              <label class="form-label">商机标题 *</label>
+              <input type="text" class="form-input" placeholder="例：2024年季度不锈餐具采购">
+            </div>
+            <div>
+              <label class="form-label">品类 *</label>
+              <select class="form-select"><option>日用百货 / 餐具</option><option>五金机电 / 工具</option><option>纺织面料 / 辅料</option><option>食品生鲜 / 调味品</option><option>辅料包装 / 袋类</option><option>电子元器件 / 配件</option></select>
+            </div>
+            <div>
+              <label class="form-label">采购数量</label>
+              <input type="text" class="form-input" placeholder="例：5000">
+            </div>
+            <div>
+              <label class="form-label">预算金额（元）</label>
+              <input type="text" class="form-input" placeholder="例：150000">
+            </div>
+            <div>
+              <label class="form-label">截止日期 *</label>
+              <input type="date" class="form-input">
+            </div>
+            <div>
+              <label class="form-label">采购商名称</label>
+              <input type="text" class="form-input" placeholder="例：上海餐饮集团">
+            </div>
+            <div class="full-width">
+              <label class="form-label">详细描述</label>
+              <textarea class="form-textarea" placeholder="描述采购需求、规格参数、交付要求等"></textarea>
+            </div>
+            <div class="full-width" style="text-align:right">
+              <button class="btn btn-outline btn-sm" onclick="switchImportTab('excel', document.querySelector('.import-tab'))">取消</button>
+              <button class="btn btn-primary btn-sm" style="margin-left:8px" onclick="submitManualEntry()">提交审核</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- API配置面板 -->
+        <div class="import-panel" id="panel-api">
+          <div class="api-config-row">
+            <span class="api-label">Webhook URL</span>
+            <div class="api-value"><input type="text" value="https://api.daji-platform.com/v1/opportunity/import" readonly></div>
+          </div>
+          <div class="api-config-row">
+            <span class="api-label">API Token</span>
+            <div class="api-value"><input type="text" value="dj_sk_live_8a7b3c2d1e4f5g6h7i8j9k0l" readonly></div>
+          </div>
+          <div class="api-config-row">
+            <span class="api-label">状态</span>
+            <div class="api-value"><span class="tag tag-green">已启用</span></div>
+          </div>
+          <div class="api-config-row">
+            <span class="api-label">同步记录</span>
+            <div class="api-value" style="font-size:13px;color:#666">
+              最近同步：2024-06-09 08:30 | 成功 45 条，失败 0 条<br>
+              累计同步：1,283 条
+            </div>
+          </div>
+          <div class="api-config-row">
+            <span class="api-label"></span>
+            <div class="api-value">
+              <button class="btn btn-outline btn-sm" onclick="alert('Token已重新生成，旧Token将在24小时后失效')">重新生成Token</button>
+              <button class="btn btn-outline btn-sm" style="margin-left:8px" onclick="showFormModal('API文档',[])">查看文档</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 待审核商机队列 -->
+    <div class="card" id="import-audit-card">
+      <div class="card-header">
+        待审核商机队列
+        <div class="filter-group">
+          <select class="form-select-sm">
+            <option>全部来源</option>
+            <option>Excel导入</option>
+            <option>手动录入</option>
+            <option>API同步</option>
+          </select>
+          <button class="btn btn-primary btn-sm" onclick="showBatchAudit()">批量审核</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <table class="table">
+          <thead>
+            <tr><th>商机标题</th><th>品类</th><th>采购商</th><th>预算</th><th>来源</th><th>导入时间</th><th>状态</th><th>操作</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>2024年不锈餐具年度采购</strong></td>
+              <td>日用百货 / 餐具</td>
+              <td>上海餐饮集团</td>
+              <td>¥150,000</td>
+              <td><span class="import-source excel">Excel</span></td>
+              <td>今天 10:30</td>
+              <td><span class="tag tag-blue">待审核</span></td>
+              <td>
+                <button class="btn btn-primary btn-sm" onclick="auditImport('OPP-IM-001')">审核</button>
+                <button class="btn btn-outline btn-sm">详情</button>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>食品级PE包装袋需求</strong></td>
+              <td>辅料包装 / 袋类</td>
+              <td>北京食品公司</td>
+              <td>¥80,000</td>
+              <td><span class="import-source manual">手动</span></td>
+              <td>今天 09:15</td>
+              <td><span class="tag tag-blue">待审核</span></td>
+              <td>
+                <button class="btn btn-primary btn-sm" onclick="auditImport('OPP-IM-002')">审核</button>
+                <button class="btn btn-outline btn-sm">详情</button>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>电子元件配套采购</strong></td>
+              <td>电子元器件 / 配件</td>
+              <td>广东电子厂</td>
+              <td>¥320,000</td>
+              <td><span class="import-source api">API</span></td>
+              <td>昨天 16:45</td>
+              <td><span class="tag tag-blue">待审核</span></td>
+              <td>
+                <button class="btn btn-primary btn-sm" onclick="auditImport('OPP-IM-003')">审核</button>
+                <button class="btn btn-outline btn-sm">详情</button>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>春季工作服套装采购</strong></td>
+              <td>纺织面料 / 辅料</td>
+              <td>杭州服饰公司</td>
+              <td>¥65,000</td>
+              <td><span class="import-source excel">Excel</span></td>
+              <td>昨天 14:20</td>
+              <td><span class="tag tag-blue">待审核</span></td>
+              <td>
+                <button class="btn btn-primary btn-sm" onclick="auditImport('OPP-IM-004')">审核</button>
+                <button class="btn btn-outline btn-sm">详情</button>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>进口调味料采购需求</strong></td>
+              <td>食品生鲜 / 调味品</td>
+              <td>青岛餐饮连锁</td>
+              <td>¥200,000</td>
+              <td><span class="import-source api">API</span></td>
+              <td>前天 11:10</td>
+              <td><span class="tag tag-orange">审核通过</span></td>
+              <td>
+                <button class="btn btn-outline btn-sm">详情</button>
               </td>
             </tr>
           </tbody>
@@ -2202,6 +2437,179 @@ document.addEventListener('DOMContentLoaded', function() {
   if (supplierPage) supplierPage.style.display = 'none';
   if (operationPage) operationPage.style.display = 'none';
   
+  // ========== 外部商机导入功能 ==========
+  
+  // Tab切换
+  function switchImportTab(tabName, btn) {
+    document.querySelectorAll('.import-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.import-panel').forEach(p => p.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    const panel = document.getElementById('panel-' + tabName);
+    if (panel) panel.classList.add('active');
+  }
+  window.switchImportTab = switchImportTab;
+
+  // 模拟Excel上传
+  function simulateExcelUpload() {
+    const preview = document.getElementById('excel-preview');
+    const tbody = document.getElementById('excel-preview-body');
+    const count = document.getElementById('excel-count');
+    const mockData = [
+      { title: '2024年不锈餐具年度采购', cat: '日用百货 / 餐具', qty: '5,000套', deadline: '2024-07-31' },
+      { title: '春季工作服套装采购', cat: '纺织面料 / 辅料', qty: '2,000套', deadline: '2024-08-15' },
+      { title: '工业级螺丝螺母采购', cat: '五金机电 / 工具', qty: '50,000个', deadline: '2024-09-01' },
+      { title: '食品级PE包装袋', cat: '辅料包装 / 袋类', qty: '100,000个', deadline: '2024-08-30' }
+    ];
+    count.textContent = mockData.length;
+    tbody.innerHTML = mockData.map((d, i) => `<tr>
+      <td><strong>${d.title}</strong></td>
+      <td>${d.cat}</td><td>${d.qty}</td><td>${d.deadline}</td>
+      <td><span class="import-source excel">Excel</span></td>
+      <td><span class="tag tag-green">格式正确</span></td>
+    </tr>`).join('');
+    preview.style.display = 'block';
+  }
+  window.simulateExcelUpload = simulateExcelUpload;
+
+  // 取消Excel导入
+  function cancelExcelImport() {
+    document.getElementById('excel-preview').style.display = 'none';
+  }
+  window.cancelExcelImport = cancelExcelImport;
+
+  // 提交Excel导入到审核队列
+  function submitExcelImport() {
+    document.getElementById('excel-preview').style.display = 'none';
+    updatePendingCount(4);
+    showToast('已提交 4 条商机至审核队列');
+  }
+  window.submitExcelImport = submitExcelImport;
+
+  // 提交手动录入
+  function submitManualEntry() {
+    updatePendingCount(1);
+    showToast('商机已提交至审核队列');
+    switchImportTab('excel', document.querySelector('.import-tab'));
+  }
+  window.submitManualEntry = submitManualEntry;
+
+  // 审核单条商机
+  function auditImport(id) {
+    const modal = createImportAuditModal(id);
+    document.body.appendChild(modal);
+    modal.style.display = 'flex';
+
+    document.getElementById('import-audit-approve').onclick = function() {
+      modal.remove();
+      updatePendingCount(-1);
+      showToast('商机 ' + id + ' 审核通过，已进入智能匹配');
+    };
+    document.getElementById('import-audit-reject').onclick = function() {
+      modal.remove();
+      updatePendingCount(-1);
+      showToast('商机 ' + id + ' 已驳回');
+    };
+    modal.querySelector('.modal-close').onclick = function() { modal.remove(); };
+    modal.addEventListener('click', function(e) { if (e.target === modal) modal.remove(); });
+  }
+  window.auditImport = auditImport;
+
+  function createImportAuditModal(id) {
+    const records = {
+      'OPP-IM-001': { title: '2024年不锈餐具年度采购', cat: '日用百货 / 餐具', buyer: '上海餐饮集团', budget: '¥150,000', qty: '5,000套', deadline: '2024-07-31', source: 'Excel', time: '2024-06-11 10:30' },
+      'OPP-IM-002': { title: '食品级PE包装袋需求', cat: '辅料包装 / 袋类', buyer: '北京食品公司', budget: '¥80,000', qty: '100,000个', deadline: '2024-08-30', source: '手动', time: '2024-06-11 09:15' },
+      'OPP-IM-003': { title: '电子元件配套采购', cat: '电子元器件 / 配件', buyer: '广东电子厂', budget: '¥320,000', qty: '10,000件', deadline: '2024-09-15', source: 'API', time: '2024-06-10 16:45' },
+      'OPP-IM-004': { title: '春季工作服套装采购', cat: '纺织面料 / 辅料', buyer: '杭州服饰公司', budget: '¥65,000', qty: '2,000套', deadline: '2024-08-15', source: 'Excel', time: '2024-06-10 14:20' }
+    };
+    const r = records[id] || records['OPP-IM-001'];
+    const div = document.createElement('div');
+    div.className = 'modal-overlay';
+    div.innerHTML = `<div class="modal" style="max-width:560px">
+      <div class="modal-header"><span>商机审核 - ${id}</span><span class="modal-close">&times;</span></div>
+      <div class="modal-body">
+        <div class="info-row"><span class="info-label">商机标题</span><span class="info-value">${r.title}</span></div>
+        <div class="info-row"><span class="info-label">品类</span><span class="info-value">${r.cat}</span></div>
+        <div class="info-row"><span class="info-label">采购商</span><span class="info-value">${r.buyer}</span></div>
+        <div class="info-row"><span class="info-label">预算金额</span><span class="info-value">${r.budget}</span></div>
+        <div class="info-row"><span class="info-label">采购量</span><span class="info-value">${r.qty}</span></div>
+        <div class="info-row"><span class="info-label">截止日期</span><span class="info-value">${r.deadline}</span></div>
+        <div class="info-row"><span class="info-label">来源</span><span class="info-value"><span class="tag tag-blue">${r.source}</span></span></div>
+        <div class="info-row"><span class="info-label">导入时间</span><span class="info-value">${r.time}</span></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="import-audit-reject">驳回</button>
+        <button class="btn btn-primary" id="import-audit-approve">审核通过</button>
+      </div>
+    </div>`;
+    return div;
+  }
+
+  // 批量审核
+  function showBatchAudit() {
+    showFormModal('批量审核', [
+      { label: '选择商机', type: 'checkbox', options: [
+        'OPP-IM-001 2024年不锈餐具年度采购',
+        'OPP-IM-002 食品级PE包装袋需求',
+        'OPP-IM-003 电子元件配套采购',
+        'OPP-IM-004 春季工作服套装采购'
+      ]},
+      { label: '审核结果', type: 'radio', options: ['全部通过', '全部驳回'] }
+    ]);
+    // 简化：直接更新
+    setTimeout(function() {
+      const modals = document.querySelectorAll('.modal-overlay');
+      modals.forEach(m => m.remove());
+      updatePendingCount(-4);
+      showToast('批量审核完成：4条通过，0条驳回');
+    }, 500);
+  }
+  window.showBatchAudit = showBatchAudit;
+
+  // 导入记录
+  function showImportHistory() {
+    const div = document.createElement('div');
+    div.className = 'modal-overlay';
+    div.innerHTML = `<div class="modal" style="max-width:700px">
+      <div class="modal-header"><span>导入记录</span><span class="modal-close">&times;</span></div>
+      <div class="modal-body">
+        <table class="table">
+          <thead><tr><th>文件/来源</th><th>导入方式</th><th>数量</th><th>时间</th><th>状态</th></tr></thead>
+          <tbody>
+            <tr><td>餐具采购清单.xlsx</td><td>Excel</td><td>45条</td><td>2024-06-11 10:30</td><td><span class="tag tag-green">完成</span></td></tr>
+            <tr><td>API自动同步</td><td>API</td><td>12条</td><td>2024-06-11 08:30</td><td><span class="tag tag-green">完成</span></td></tr>
+            <tr><td>手动录入</td><td>手动</td><td>3条</td><td>2024-06-10 16:45</td><td><span class="tag tag-green">完成</span></td></tr>
+            <tr><td>服装辅料需求.xlsx</td><td>Excel</td><td>28条</td><td>2024-06-10 14:20</td><td><span class="tag tag-green">完成</span></td></tr>
+            <tr><td>API自动同步</td><td>API</td><td>45条</td><td>2024-06-09 08:30</td><td><span class="tag tag-green">完成</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+    document.body.appendChild(div);
+    div.style.display = 'flex';
+    div.querySelector('.modal-close').onclick = function() { div.remove(); };
+    div.addEventListener('click', function(e) { if (e.target === div) div.remove(); });
+  }
+  window.showImportHistory = showImportHistory;
+
+  // 更新待审核计数
+  function updatePendingCount(delta) {
+    const el = document.getElementById('stat-pending-import');
+    if (el) {
+      let val = parseInt(el.textContent) || 0;
+      val = Math.max(0, val + delta);
+      el.textContent = val;
+    }
+  }
+
+  // Toast提示
+  function showToast(msg) {
+    const toast = document.createElement('div');
+    toast.textContent = msg;
+    toast.style.cssText = 'position:fixed;top:24px;left:50%;transform:translateX(-50%);background:#e60012;color:#fff;padding:10px 24px;border-radius:6px;font-size:14px;z-index:10000;box-shadow:0 4px 12px rgba(0,0,0,0.15);animation:fadeInOut 2.5s forwards';
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 2600);
+  }
+
   // 绑定按钮事件
   bindButtonEvents();
   
